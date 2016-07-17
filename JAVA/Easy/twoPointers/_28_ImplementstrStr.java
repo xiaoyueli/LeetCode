@@ -11,27 +11,26 @@ public class _28_ImplementstrStr {
     public int strStr(String haystack, String needle) {
         
         
-        String h = haystack;
-        String n = needle;
+        char[] hay = haystack.toCharArray();
+        char[] pat = needle.toCharArray();
         
-        if (n.length() == 0) return 0;
+        if (pat.length == 0) return 0;
         
-        int[] right = new int[256];
-        for (int idx = 0; idx < 256; idx++) right[idx] = -1;
-        for (int idx = 0; idx < n.length(); idx++) right[n.charAt(idx)] = idx;
+        int[] map = new int[128];
+        for (int idx = 0; idx < 128; idx++) map[idx] = -1;
+        for (int idx = 0; idx < pat.length; idx++) map[pat[idx]] = idx;
         
         int skip;
-        for (int idx = 0; idx <= h.length() - n.length(); idx += skip) {
-            skip = 0;
-            for (int len = n.length() - 1; len >= 0; len--) {
-                if (h.charAt(idx + len) != n.charAt(len)) {
-                    skip = len - right[h.charAt(idx + len)];
-                    if (skip < 1) skip = 1;
-                    break;
-                }
+        for (int idx = 0; idx <= hay.length - pat.length; idx += skip) {
+            
+            int rear;
+            for (rear = pat.length - 1; rear >= 0; rear--) {
+                if (hay[idx + rear] != pat[rear]) break;
             }
-            if (skip == 0) return idx;
-        } 
+            if (rear == -1) return idx;
+            skip = rear - map[hay[idx + rear]];
+            if (skip < 1) skip = 1;
+        }
         
         return -1;
          
