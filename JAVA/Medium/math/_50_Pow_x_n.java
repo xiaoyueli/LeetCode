@@ -2,6 +2,11 @@ package math;
 
 /**
  * Implement pow(x, n).
+ * 
+ * 二进制移位法：
+ * 原理：
+ * 当N为偶数时，X的N次方 == X的N/2次方 + X的N/2次方  : 2的6次方 == 2的3次方 + 2的3次方
+ * 当N为奇数时，X的N次方 == X的N/2 + X的 N/2 + X;
  *
  */
 
@@ -19,9 +24,9 @@ public class _50_Pow_x_n {
         double res = 1;
         while (ln > 0) {
 
-            if (ln % 2 != 0) res *= x;
-            x *= x;
-            ln >>= 1;
+            if (ln % 2 != 0) res *= x;  // n 为奇数时，结果需要多乘一次X
+            ln >>= 1; // n 每右移1位，其值缩放2倍， X = X^2
+            x *= x; 
             
         }        
 
