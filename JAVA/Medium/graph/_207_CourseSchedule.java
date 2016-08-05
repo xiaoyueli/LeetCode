@@ -32,6 +32,9 @@ import java.util.Queue;
  * The input prerequisites is a graph represented by a list of edges, 
  * not adjacency matrices. Read more about how a graph is represented.
  *
+ * # 将入度为0的结点进行BFS，更新被入度结点入度 数
+ * 
+ * dfs TLE?
  */
 
 public class _207_CourseSchedule {

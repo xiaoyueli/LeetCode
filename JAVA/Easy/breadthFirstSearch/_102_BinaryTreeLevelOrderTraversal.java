@@ -30,13 +30,14 @@ import java.util.Queue;
  * 
  * Definition for a binary tree node.
  * 
- */
-class TreeNode {
+ *
+ *class TreeNode {
      int val;
      TreeNode left;
      TreeNode right;
      TreeNode(int x) { val = x; }
-}
+ }
+ */
 
 public class _102_BinaryTreeLevelOrderTraversal {
     public List<List<Integer>> levelOrder(TreeNode root) {
