@@ -54,5 +54,31 @@ public class _232_ImplementQueueusingStacks {
     public boolean empty() {
         return que.isEmpty() && stack.isEmpty();
     }
+    
+    // 方法二，保持一个stack为空
+//    Stack<Integer> stack = new Stack<Integer>();
+//    Stack<Integer> que = new Stack<Integer>();
+//    // Push element x to the back of queue.
+//    public void push(int x) {
+//        while (!que.isEmpty()) stack.push(que.pop());
+//        stack.push(x);
+//        while (!stack.isEmpty()) que.push(stack.pop());
+//        
+//    }
+//
+//    // Removes the element from in front of queue.
+//    public void pop() {
+//        que.pop();
+//    }
+//
+//    // Get the front element.
+//    public int peek() {
+//       return que.peek();
+//    }
+//
+//    // Return whether the queue is empty.
+//    public boolean empty() {
+//        return que.isEmpty();
+//    }
 
 }
