@@ -15,6 +15,7 @@ package dynamicProgramming;
 
 public class _53_MaximumSubarray {
 
+
     public int maxSubArray(int[] nums) {
         
         int res = Integer.MIN_VALUE;
@@ -31,5 +32,8 @@ public class _53_MaximumSubarray {
         return res;
         
     }
- 
+    public static void main(String[] args) {
+        _53_MaximumSubarray test = new _53_MaximumSubarray();
+        test.maxSubArray(new int[] {31,-41,59,26,-53,58,97,-93,-23,84});
+    }
 }

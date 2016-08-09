@@ -2,6 +2,7 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -34,7 +35,8 @@ import java.util.PriorityQueue;
  * # 
  * 旅游规划，机票排序dfs + heap
  * hashmap 建图，pq保存到达城市
- * dfs 从出发地遍历，到达城市相当于对应一张机票
+ * 方法一： dfs 从出发地遍历，当没有后续到达城市时将其压入List（原理同栈），否则继续dfs
+ * 方法二：dfs 从出发地遍历，到达城市相当于对应一张机票
  * dfs排序值最小的城市，机票使用数+1
  * 
  *
@@ -42,10 +44,10 @@ import java.util.PriorityQueue;
 
 public class _332_ReconstructItinerary {
     
-
     HashMap<String, PriorityQueue<String>> gra;
     List<String> res;
     boolean isFind;
+    
     public List<String> findItinerary(String[][] tickets) {
         isFind = false;
         gra = new HashMap<String, PriorityQueue<String>>();
@@ -55,37 +57,72 @@ public class _332_ReconstructItinerary {
             gra.get(from).offer(t[1]);
         }
         
-        res = new ArrayList<String>();   
-        dfs("JFK", 0, tickets.length);
+        res = new LinkedList<String>();
+        dfs("JFK");
         
         return res;
-   
     }
     
-    public void dfs(String city, int cnt, int total) {
-        res.add(city);
+    public void dfs(String city) {
 
         PriorityQueue<String> toCities = gra.get(city);
         
-        if (cnt == total) {
-            isFind = true;
-            return;
+        if (toCities != null && !toCities.isEmpty()) {
+            while (!toCities.isEmpty()) {
+                String to = toCities.poll();
+                dfs(to);
+            }
         }
-        
-        if (toCities == null || toCities.isEmpty()) return;
 
-        PriorityQueue<String> cities = new PriorityQueue<String>(toCities);
-        while (!cities.isEmpty()) {
-            String c = cities.poll();
-            toCities.remove(c);
-            dfs(c, cnt + 1, total);
-            if (isFind) return;
-            int len = res.size();
-            res.remove(len - 1);           
-            toCities.offer(c);
-        }
+        res.add(0, city);
         
     }
+    
+
+//    HashMap<String, PriorityQueue<String>> gra;
+//    List<String> res;
+//    boolean isFind;
+//    public List<String> findItinerary(String[][] tickets) {
+//        isFind = false;
+//        gra = new HashMap<String, PriorityQueue<String>>();
+//        for (String[] t: tickets) {
+//            String from = t[0];
+//            if (!gra.containsKey(from)) gra.put(from, new PriorityQueue<String>());
+//            gra.get(from).offer(t[1]);
+//        }
+//        
+//        res = new ArrayList<String>();
+//        
+//        dfs("JFK", 0, tickets.length);
+//        
+//        return res;
+//   
+//    }
+//    
+//    public void dfs(String city, int cnt, int total) {
+//        res.add(city);
+//
+//        PriorityQueue<String> toCities = gra.get(city);
+//        
+//        if (cnt == total) {
+//            isFind = true;
+//            return;
+//        }
+//        
+//        if (toCities == null || toCities.isEmpty()) return;
+//
+//        PriorityQueue<String> cities = new PriorityQueue<String>(toCities);
+//        while (!cities.isEmpty()) {
+//            String c = cities.poll();
+//            toCities.remove(c);
+//            dfs(c, cnt + 1, total);
+//            if (isFind) return;
+//            int len = res.size();
+//            res.remove(len - 1);           
+//            toCities.offer(c);
+//        }
+//        
+//    }
     
     
     public static void main(String[] args) {

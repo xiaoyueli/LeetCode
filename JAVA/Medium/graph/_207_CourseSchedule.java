@@ -32,15 +32,59 @@ import java.util.Queue;
  * The input prerequisites is a graph represented by a list of edges, 
  * not adjacency matrices. Read more about how a graph is represented.
  *
- * # 将入度为0的结点进行BFS，更新被入度结点入度 数
+ * 将入度为0的结点进行BFS，更新被入度结点入度 数
  * 
- * dfs TLE?
+ * dfs ,将访问过的结点标记为visited， 将没有后续课程的结点标记为valid?
+ * 如果再次访问的结点是visited而不是valid则说明存在环
  */
 
 public class _207_CourseSchedule {
     
-    // 二维数组建图
+    // dfs + list
+    List<HashSet<Integer>> gra;
+    final int visited = 1;
+    final int valid = 2;
     public boolean canFinish(int numCourses, int[][] prerequisites) {
+      
+      gra = new ArrayList(); 
+      
+      for (int idx = 0; idx < numCourses; idx++) gra.add(new HashSet<Integer>());  
+
+      int edgeNum = prerequisites.length;
+      for (int idx = 0; idx < edgeNum; idx++) {
+          int[] edge = prerequisites[idx];
+          HashSet<Integer> set = gra.get(edge[0]);
+          set.add(edge[1]);
+      }
+      
+      int[] marks = new int[numCourses];
+      for (int idx = 0; idx < numCourses; idx++) {
+          if (marks[idx] == valid) continue;
+          if (!dfs(marks, idx)) return false;
+      }
+      
+      return true;
+  }
+  
+  public boolean dfs(int[] marks, int cur) {
+      HashSet<Integer> set = gra.get(cur);
+
+      if (!set.isEmpty()) {
+          marks[cur] = visited;
+          for (int i: set) {
+              int val = marks[i];
+              if (val == valid) continue;
+              if (val == visited) return false;
+              if (!dfs(marks, i)) return false;
+          }
+      }
+      
+      marks[cur] = valid;
+      return true;
+  }
+    
+    // 二维数组建图
+    public boolean canFinish1(int numCourses, int[][] prerequisites) {
         
         boolean[][] graph = new boolean[numCourses][numCourses]; 
 
