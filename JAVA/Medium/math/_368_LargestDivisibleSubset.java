@@ -2,6 +2,7 @@ package math;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,51 +23,61 @@ import java.util.List;
  * 排序之后两重循环
  * j < i;
  * if nums[i] % nums[j] == 0 , counts[i] = counts[j] + 1;
+ * 
+ * 动态规划，
+ * 需排序，后一个数能被前一个数整除，则必能被能整除前一个数的数整除
+ * 用一个数组计算每一个数能被之前的数整除的最大数量
+ * 用另一个数组记录最大set中前一个能被整除的数的下标
  */
 
 public class _368_LargestDivisibleSubset {
     
     public List<Integer> largestDivisibleSubset(int[] nums) {
         
-        List<Integer> lst = new ArrayList<Integer>();
-        Arrays.sort(nums);
+        List<Integer> res = new ArrayList<Integer>();
+        
         int len = nums.length;
-        if (len < 1) return lst;
-        int[] counts = new int[len];
-        int[] parents = new int[len];
+        if (len == 0) return res;
         
-        parents[0] = -1;
-        int maxSize = 0;
-        int maxIdx = -1;
+        int[] count = new int[len];  // 保存该坐标的数最多能被多少个之前的数整除
+        int[] pres = new int[len];   // 保存最大set的前一个数的下标
+        Arrays.sort(nums);
         
-        for (int idx = 1; idx < len; idx++) {
-            int curVal = nums[idx];
-            parents[idx] = -1;
-            for (int curIdx = 0; curIdx < idx; curIdx++) {
-                int preVal = nums[curIdx];
-                if (curVal % preVal == 0 && counts[curIdx] + 1 > counts[idx]) {
-                    counts[idx] = counts[curIdx] + 1;
-                    parents[idx] = curIdx;
+        for (int idx = 0; idx < len; idx++) pres[idx] = -1; // 初始化上一个数的下标
+        
+        int maxNum = 0;
+        int maxIdx = 0;
+        
+        for (int i = 1; i < len; i++) {
+            int val = nums[i];  // 当前值
+            for (int j = i - 1; j >= 0; j--) {
+                int pre = nums[j]; // 之前的数
+                if (val < pre) break;
+                if (val % pre == 0) {
+                    // 如果能被之前的数整除，则保存其中有最大set的数
+                    int temp = count[j] + 1;
+                    if (temp > count[i]) {
+                        count[i] = temp;
+                        pres[i] = j;
+                        val /= pre;  // 排除重复计算，例如val == 16, 遇到8时 就可以停止检查之前的数
+                    }
+                    
                 }
             }
             
-            if (counts[idx] > maxSize) {
-                maxSize = counts[idx];
-                maxIdx = idx;
+            if (count[i] > maxNum) {
+                // 记录最大set
+                maxNum = count[i];
+                maxIdx = i;
             }
         }
+
+        do {
+            res.add(0, nums[maxIdx]);
+            maxIdx = pres[maxIdx];
+        }while (maxIdx != -1);
         
-        if (maxIdx == -1) {
-            lst.add(nums[0]);
-        }
-        else {
-            do {
-                lst.add(nums[maxIdx]);
-                maxIdx = parents[maxIdx];
-            }while (maxIdx != -1);
-        }
-        
-        return lst; 
+        return res;
         
     }
 }
