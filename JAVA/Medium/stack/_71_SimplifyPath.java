@@ -16,6 +16,9 @@ package stack;
  */
 
 public class _71_SimplifyPath {
+    
+   
+    
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
