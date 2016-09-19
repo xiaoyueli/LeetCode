@@ -10,8 +10,6 @@ package tree;
 
 public class _100_SameTree {
     
-
-    
     public boolean isSameTree(TreeNode p, TreeNode q) {
         
         if (p == null && q == null) return true;
