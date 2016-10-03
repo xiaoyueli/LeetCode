@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="/" kind="src" path="src"/>
 	<classpathentry kind="src" path="Easy"/>
 	<classpathentry kind="src" path="Medium"/>
 	<classpathentry kind="src" path="Hard"/>

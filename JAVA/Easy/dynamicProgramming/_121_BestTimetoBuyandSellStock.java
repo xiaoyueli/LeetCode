@@ -35,6 +35,8 @@ public class _121_BestTimetoBuyandSellStock {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+    	_121_BestTimetoBuyandSellStock test = new _121_BestTimetoBuyandSellStock();
+    	test.maxProfit(new int[]{1,2});
     }
 
 }
