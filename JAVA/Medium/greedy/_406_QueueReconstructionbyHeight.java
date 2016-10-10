@@ -33,30 +33,15 @@ public class _406_QueueReconstructionbyHeight {
         
         int len = people.length;
         
-        Comparator<int[]> myComK = new Comparator<int[]>() {
-            public int compare(int[] a, int[] b) {
-                if (a[0] > b[0]) return -1;
-                if (a[0] < b[0]) return 1;
-                return 0;
-            }
-        };
-        
+        // 先按H将序，再按K升序
         Comparator<int[]> myComH = new Comparator<int[]>() {
             public int compare(int[] a, int[] b) {
-                if (a[1] > b[1]) return 1;
-                if (a[1] < b[1]) return -1;
-                return 0;
+                if (a[0] == b[0]) return a[1] - b[1];
+                else return b[0] - a[0];
             }
         };
-
-        // sortByHeightDes(people, 0, len - 1);
         
         Arrays.sort(people, myComH);
-        Arrays.sort(people, myComK);
-        
-        for (int idx = 0; idx < len; idx++) {
-        	System.out.println(people[idx][0] + " " + people[idx][1]);
-        }
         
         for (int idx = 0; idx < len; idx++) {
             int[] person = people[idx];

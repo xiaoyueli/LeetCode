@@ -1,61 +1,64 @@
 package bitManipulation;
 
+/**
+ * Given a string array words, 
+ * find the maximum value of length(word[i]) * length(word[j]) where the two words do not share common letters. 
+ * You may assume that each word will contain only lower case letters. If no such two words exist, return 0.
+ * 
+ * Example 1:
+ * Given ["abcw", "baz", "foo", "bar", "xtfn", "abcdef"]
+ * Return 16
+ * The two words can be "abcw", "xtfn".
+ * 
+ * Example 2:
+ * Given ["a", "ab", "abc", "d", "cd", "bcd", "abcd"]
+ * Return 4
+ * The two words can be "ab", "cd".
+ * 
+ * Example 3:
+ * Given ["a", "aa", "aaa", "aaaa"]
+ * Return 0
+ * No such pair of words.
+ * 
+ * @author xiaoyue
+ *
+ */
+
 // 位操作检查两个字符串是否有重叠字符ß
 
-import java.util.Arrays;
-import java.util.Comparator;
 
 public class _318_MaximumProductofWordLengths {
 	
     public int maxProduct(String[] words) {
         
-        Comparator<String> myCom = new Comparator<String>() {
-            public int compare(String s1, String s2) {
-                int len1 = s1.length();
-                int len2 = s2.length();
-                if (len1 > len2) return -1;
-                if (len1 < len2) return 1;
-                return 0;
-            }
-        };
-        
-        Arrays.sort(words, myCom);
-        
         int len = words.length;
         
-        for (int i = 1; i < len; i++) {
-            String sec = words[i];
-            
-            for (int j = 0; j < i; j++) {
-                String fir = words[j];
+        int max = 0;
+        
+        for (int i = 0; i < len; i++) {
+            boolean[] count = new boolean[26];
+            String fir = words[i];
+            for (char c: fir.toCharArray()) {
+                count[c - 'a'] = true;
+            }
+            for (int j = i + 1; j < len; j++) {
+                String sec = words[j];
                 
-                boolean res = isValid(sec, fir);
-                System.out.println(res + ":  " + j + " " + fir + "    " + i + " " + sec);
-                if (res) return sec.length() * fir.length();
+                if (sec.length() * fir.length() > max){
+                    boolean valid = true;
+                    for (char c: sec.toCharArray()) {
+                        if (count[c - 'a']) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if (valid) max = sec.length() * fir.length();
+                } 
+                    
             }    
         }
         
-        return 0;
-        
-    }
-    
-    private boolean isValid(String s1, String s2) {
-        
-        char[] arr1 = s1.toCharArray();
-        char[] arr2 = s2.toCharArray();
-        int[] count = new int[26];
-        
-        for (char c: arr1) {
-            count[c - 'a']++;
-        }
-        
-        for (char c: arr2) {
-            if (count[c - 'a'] != 0) return false;
-        }
-        
-        return true;
-        
-        
+        return max;
     }
 
 	public static void main(String[] args) {
