@@ -114,7 +114,8 @@ public class _5_LongestPalindromicSubstring {
     
     public static void main(String[] args) {
         _5_LongestPalindromicSubstring test = new _5_LongestPalindromicSubstring();
-        test.longestPalindrome("abb");
+//        test.longestPalindrome("abb");
+        System.out.println(15 >> 1);
     }
 
 }
