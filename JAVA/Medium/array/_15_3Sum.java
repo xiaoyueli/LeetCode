@@ -22,40 +22,40 @@ import java.util.List;
 
 public class _15_3Sum {
     
-    int[] nums;
     public List<List<Integer>> threeSum(int[] nums) {
         
-        this.nums = nums;
         List<List<Integer>> res = new ArrayList<>();
-        Arrays.sort(nums);
         int len = nums.length;
-        boolean flag = false;
-        for (int one = 0; one < len; one++) {
+        if (len < 3) return res;
+        Arrays.sort(nums);
+        
+        for (int one = 0; one < len - 2; one++) {
+            if (one != 0 && nums[one] == nums[one - 1]) continue;
             
             int two = one + 1;
             int three = len - 1;
             
-            if (flag && nums[one] == nums[one - 1]) continue;
-            else flag = false;
-            
             while (two < three) {
-                int val = nums[one] + nums[two] + nums[three];
-                if (val == 0) {
+                int sum = nums[one] + nums[two] + nums[three];
+                if (sum == 0) {
                     List<Integer> list = new ArrayList<Integer>();
                     list.add(nums[one]);
                     list.add(nums[two]);
                     list.add(nums[three]);
                     res.add(list);
-                    flag = true;
-                    while (two < len - 1 && nums[two] == nums[++two]);
-                    while (three > two && nums[three] == nums[--three]);
+                    two++;
+                    three--;
+                    while (two < three && nums[two] == nums[two - 1]) two++;
+                    while (three > two && nums[three] == nums[three + 1]) three--;
+                    
                 }
-                else if (val < 0) two++;
-                else three--;
+                else if (sum > 0) three--;
+                else two++;
             }
         }
         
         return res;
+        
     }
 
 }

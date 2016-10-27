@@ -16,18 +16,18 @@ import java.util.HashMap;
 public class _1_TwoSum {
 	
     public int[] twoSum(int[] nums, int target) {
-    	
-    	HashMap<Integer, Integer> map = new HashMap<>();
-    	
-    	for(int idx = 0; idx < nums.length; idx ++){
-    		int complement = target - nums[idx];
-    		if(map.containsKey(complement) && map.get(complement) != idx){
-    			return new int[]{map.get(complement), idx};
-    		}
-    		map.put(nums[idx], idx);
-    	}
-    	
+        
+        HashMap<Integer, Integer> table = new HashMap<Integer, Integer>();
+        
+        int len = nums.length;
+        for (int idx = 0; idx < len; idx++) {
+            int other = target - nums[idx];
+            if (table.containsKey(other)) return new int[]{table.get(other), idx};
+            table.put(nums[idx], idx);
+        }
+        
         return null;
+        
     }
 
 }
