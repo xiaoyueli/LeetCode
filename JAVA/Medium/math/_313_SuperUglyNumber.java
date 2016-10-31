@@ -19,37 +19,29 @@ public class _313_SuperUglyNumber {
     
     public int nthSuperUglyNumber(int n, int[] primes) {
         
+        int[] ugly = new int[n];
+        ugly[0] = 1;
         int len = primes.length;
-        int[] minPrimes = new int[len];
+        int[] tracks = new int[len];
+        int[] values = new int[len];
         
-        for (int idx = 0; idx < len; idx++) minPrimes[idx] = 1 * primes[idx];
-        
-        int[] uNums = new int[n];
-        int[] indices = new int[len];
-        uNums[0] = 1;
-        
-        for (int idx = 1; idx < uNums.length; idx++) {
+        int idx = 1;
+        while (idx < n) {
+            
             int min = Integer.MAX_VALUE;
-            for (int pIdx = 0; pIdx < len; pIdx++) {
-                int val = minPrimes[pIdx];
-                if (val < min) min = val;
+            for (int prime = 0; prime < len; prime++) {
+                values[prime] = ugly[tracks[prime]] * primes[prime];
+                if (min > values[prime]) min = values[prime];
             }
             
-            uNums[idx] = min;
-            
-            for (int pIdx = 0; pIdx < len; pIdx++) {
-                if (min == minPrimes[pIdx]) {
-                    
-                    indices[pIdx]++;
-                    minPrimes[pIdx] = uNums[indices[pIdx]] * primes[pIdx];
-    
-                }
+            for (int prime = 0; prime < len; prime++) {
+                if (min == values[prime]) tracks[prime]++;
             }
             
-            
+            ugly[idx++] = min;
         }
         
-        return uNums[n - 1];
+        return ugly[n - 1];
         
     }
     

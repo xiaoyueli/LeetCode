@@ -26,36 +26,22 @@ public class _409_LongestPalindrome {
     public int longestPalindrome(String s) {
         
         char[] seq = s.toCharArray();
-        int[] lower = new int[26];
-        int[] upper = new int[26];
         
-        int len = seq.length;
-        for (int idx = 0; idx < len; idx++) {
-            char cur = seq[idx];
-            int val = cur - 'a';
-            if (val >= 0 && val < 26) lower[val]++;
-            else upper[cur - 'A']++;
-        }
+        int[] mark = new int[128];
+        
+        for (char c: seq) mark[c]++;
         
         int sum = 0;
-        boolean odd = false;
-        for (int idx = 0; idx < 26; idx++) {
-            int val = lower[idx];
-            
-            if (val != 0) {
-                sum += val / 2 * 2;
-                if (val % 2 == 1) odd = true;
-            }
-            
-            val = upper[idx];
-            if (val != 0) {
-                sum += val / 2 * 2;
-                if (val % 2 == 1) odd = true;
+        boolean isOdd = false;
+        for (int i: mark) {
+            if (i % 2 == 0) sum +=i;
+            else {
+                sum += i - 1;
+                isOdd = true;
             }
         }
         
-        if (odd) sum += 1;
-        
+        if (isOdd) return sum + 1;
         return sum;
         
     }

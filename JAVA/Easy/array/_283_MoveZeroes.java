@@ -3,19 +3,23 @@ package array;
 public class _283_MoveZeroes {
     
     public void moveZeroes(int[] nums) {
-        int non0 = 0;
-        for (int idx = 0; idx < nums.length; idx++) {
-            if (nums[idx] != 0) {
-                swap(non0, idx, nums);
-                non0++;
+        
+        int zero = 0;
+        int len = nums.length;
+        
+        for (int idx = 0; idx < len; idx++) {
+            int val = nums[idx];
+            if (val != 0) {
+                swap(nums, zero, idx);
+                zero++;
             }
         }
+        
     }
     
-    public void swap(int here, int other, int[] arr) {
-        if (here == other) return;
-        int temp = arr[here];
-        arr[here] = arr[other];
-        arr[other] = temp;
+    private void swap(int[] seq, int i, int j) {
+        int temp = seq[i];
+        seq[i] = seq[j];
+        seq[j] = temp;
     }
 }
