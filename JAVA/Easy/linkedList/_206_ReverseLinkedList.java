@@ -15,18 +15,20 @@ class ListNode {
 }
 
 public class _206_ReverseLinkedList {
+    
     public ListNode reverseList(ListNode head) {
         
-        if (head == null) return head;
+        if (head == null) return null;
+        ListNode ls = null;
         
-        ListNode rear = head;
-        ListNode subHead = head.next;
-        while (subHead != null) {
-            rear.next = subHead.next;
-            subHead.next = head;
-            head = subHead;
-            subHead = rear.next;
+        while (head != null) {
+            ListNode temp = head.next;
+            head.next = ls;
+            ls = head;
+            head = temp;
         }
-        return head;
+        
+        return ls;
+        
     }
 }

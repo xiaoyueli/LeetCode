@@ -15,12 +15,43 @@ package dynamicProgramming;
  * Can you do it like a boss? 
  * Do it without using any builtin function like __builtin_popcount in c++ or in any other language.
  * 
- * 如果一个数是2的倍数，则1的数量和其1/2的值相等
+ * 思路：
+ * 方法1：
+ * 如果是奇数，则1的数量为上一个偶数+1；
+ * 如果是pow of 2的数，则1的数量为1
+ * 其他偶数，pow of 2的数的和，于是每次遇到新的POW of 2的数，记录下来，然后用当前数 - 新的pow of 2的数，相加他们1的数量即为当前值1得数量
+ * 
+ * 
+ * 方法2：如果一个数是2的倍数，则1的数量和其1/2的值相等
  * 否则为其1/2的值得数量 + 1
  */
 
 public class _338_CountingBits {
+    
     public int[] countBits(int num) {
+        
+        int[] res = new int[num + 1];
+        
+        int pow = 1;
+        for (int i = 1; i <= num; i++){
+            if (i % 2 != 0) res[i] = res[i - 1] + 1;
+            else {
+               if (i % pow == 0) {
+                   res[i] = 1;
+                   pow = i;
+               } 
+               else res[i] = res[pow] + res[i - pow];
+            }
+        }
+        
+        return res;
+        
+    }
+    
+    public int[] countBits1(int num) {
+        // 如果一个数是2的倍数，则1的数量和其1/2的值相等
+        // 否则为其1/2的值得数量 + 1
+        
         int[] res = new int[num + 1];
         
         res[0] = 0;

@@ -20,6 +20,7 @@ package linkedList;
  */
 public class _24_SwapNodesinPairs {
     
+    //递归
     public ListNode swapPairs(ListNode head) {
         if (head == null || head.next == null) return head;
         
@@ -27,6 +28,28 @@ public class _24_SwapNodesinPairs {
         head.next = swapPairs(sec.next);
         sec.next = head;
         head = sec;
+        
+        return head;
+    }
+    
+    // 迭代
+    public ListNode swapPairs2(ListNode head) {
+        
+        ListNode temp = new ListNode(0);
+        temp.next = head;
+        head = temp;
+        ListNode cur = head;
+        
+        while (cur.next != null && cur.next.next != null) {
+            
+            temp = cur.next;
+            cur.next = cur.next.next;
+            temp.next = cur.next.next;
+            cur.next.next = temp;
+            cur = temp;
+        }
+        
+        head = head.next;
         
         return head;
     }

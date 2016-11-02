@@ -26,32 +26,30 @@ public class _213_HouseRobber2 {
     public int rob(int[] nums) {
         
         int len = nums.length;
-        if (nums == null || len == 0) return 0;
+        if (len == 0) return 0;
         if (len == 1) return nums[0];
+        if (len == 2) return Math.max(nums[0], nums[1]);
+               
+        int frob = nums[0];
+        int fnoRob = nums[0];
+        int nfrob = nums[1];
+        int nfnoRob = 0;
         
-        // ft: first house robbed, current house robbed
-        // fnc: first house robbed, current house not robbed
-        // nfc: first house not robbed, current house robbed
-        // nfnc: first house not robbed, current house not robbed
-        int fc = 0;
-        int fnc = nums[0];
-        int nfc = nums[1];
-        int nfnc = 0;
-        
-        for (int house = 2; house < len; house++) {
-            int money = nums[house];
+        for (int idx = 2; idx < len; idx++) {
+            int val = nums[idx];
             
-            int temp = fnc;
-            fnc = Math.max(fc, fnc);
-            fc = temp + money;
+            int temp = frob;
+            frob = fnoRob + val;
+            fnoRob = Math.max(temp, fnoRob);
             
-            temp = nfnc;
-            nfnc = Math.max(nfc, nfnc);
-            nfc = temp + money;
+            temp = nfrob;
+            nfrob = nfnoRob + val;
+            nfnoRob = Math.max(nfnoRob, temp);
         }
         
-        int firstNotRobbed = Math.max(nfc, nfnc);
-        return Math.max(fnc, firstNotRobbed);
+        int temp = Math.max(nfrob, nfnoRob);
+        
+        return Math.max(fnoRob, temp);
         
     }
 

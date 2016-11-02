@@ -8,7 +8,14 @@ package math;
  */
 
 public class _326_PowerofThree {
+    
     public boolean isPowerOfThree(int n) {
+        
+        return n > 0 && Math.pow(3, 31) % n == 0;
+        
+    }
+    
+    public boolean isPowerOfThree1(int n) {
         if (n < 1) return false;
         return n == Math.pow(3, Math.round(Math.log(n) / Math.log(3)));
         

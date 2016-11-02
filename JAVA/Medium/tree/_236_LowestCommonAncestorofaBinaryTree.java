@@ -2,6 +2,7 @@ package tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
@@ -22,50 +23,71 @@ import java.util.List;
  * Another example is LCA of nodes 5 and 4 is 5, 
  * since a node can be a descendant of itself according to the LCA definition
  * 
- * 重复数据的情况？
+ * 比较的是实例，不是value.
+ * 
  */
 
 public class _236_LowestCommonAncestorofaBinaryTree {
     
+    // 递归
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         
-        List<TreeNode> seq1 = new ArrayList<TreeNode>();
-        List<TreeNode> seq2 = new ArrayList<TreeNode>();
+        if (root == null || p == null || q == null) return null;
         
-        search(root, p, seq1);
-        search(root, q, seq2);
+        if (root == p) return p;
+        if (root == q) return q;
         
-        int idx = 0;
-        int len = Math.min(seq1.size(), seq2.size());
-        while (idx < len) {
-            TreeNode cur1 = seq1.get(idx);
-            TreeNode cur2 = seq2.get(idx);
-            
-            if (cur1.val != cur2.val) break;
-            idx++;
-        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
         
-        return seq1.get(idx - 1);
+        if (left != null && right != null) return root;
+        if (left == null && right == null) return null;
+        if (left == null) return right;
+        else return left;
+        
         
     }
     
-    public boolean search(TreeNode root, TreeNode td, List<TreeNode> lst) {
-                
-
-        if (root == td) {
-            lst.add(root);
+    // 用栈找路径
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        
+        if (root == null || p == null || q == null) return null;
+        
+        Stack<TreeNode> sp = new Stack<TreeNode>();
+        Stack<TreeNode> sq = new Stack<TreeNode>();
+        
+        
+        path(root, p, sp);
+        path(root, q, sq);
+        
+        TreeNode res = root;
+        
+        while (!sp.isEmpty() && !sq.isEmpty() && sp.peek() == sq.peek()) {
+            res = sp.pop();
+            sq.pop();
+        }
+        
+        return res;
+        
+    }
+    
+    private boolean path(TreeNode root, TreeNode node, Stack<TreeNode> stack) {
+        if (root == null) return false;
+        if (root == node) return true;
+        
+        boolean found = path(root.left, node, stack);
+        if (found) {
+            stack.push(root.left);
+            return true;
+        }
+        found = path(root.right, node, stack);
+        if (found) {
+            stack.push(root.right);
             return true;
         }
         
-        if (root != null) {
-            lst.add(root);
-            if (search(root.left, td, lst)) return true;
-            if (search(root.right, td, lst)) return true;
-            lst.remove(lst.size() - 1);
-            
-        }
-
         return false;
+        
     }
 
 }

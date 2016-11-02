@@ -25,27 +25,22 @@ public class _257_BinaryTreePaths {
         
         List<String> res = new ArrayList<String>();
         
-        if (root == null) return res;
-
-        helper(root, "", res);
+        helper(root, res, "");
         
         return res;
         
     }
     
-    public void helper(TreeNode td, String str, List<String> list) {
-        
-        if (td.left == null && td.right == null) {
-            list.add(str + td.val);
+    private void helper(TreeNode rt, List<String> res, String str) {
+        if (rt == null) return;
+
+        if (rt.left == null && rt.right == null) {
+            res.add(str + rt.val);
             return;
         }
         
-        if (td.left != null) {
-            helper(td.left, str + td.val + "->", list);
-        }
-        if (td.right != null) {
-            helper(td.right, str + td.val + "->", list);
-        }
+        helper(rt.left, res, str + rt.val + "->");
+        helper(rt.right, res, str + rt.val + "->");
     }
 
     public static void main(String[] args) {

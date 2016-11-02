@@ -38,24 +38,27 @@ public class _337_HouseRobber3 {
 	
     public int rob(TreeNode root) {
         
-        int[] res = robHelper(root);
+        if (root == null) return 0;
         
-        return Math.max(res[0], res[1]);
+        int[] profit = helper(root);
+        
+        return Math.max(profit[0], profit[1]);
+        
     }
     
-    private int[] robHelper(TreeNode td) {
-        if (td == null) return new int[]{0, 0};
-        if (td.left == null && td.right == null) return new int[]{td.val, 0};
+    private int[] helper(TreeNode td) {
         
-        int[] left = robHelper(td.left);
-        int[] right = robHelper(td.right);
+        int[] res = new int[]{0, 0};
+        if (td == null) return res;
         
-        int money = td.val;
-        int rob = left[1] + money + right[1];
-        int notRob = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+        int[] left = helper(td.left);
+        int[] right = helper(td.right);
+
         
-        return new int[]{rob, notRob};
+        res[0] = left[1] + right[1] + td.val;
+        res[1] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
         
+        return res;
     }
 
 }

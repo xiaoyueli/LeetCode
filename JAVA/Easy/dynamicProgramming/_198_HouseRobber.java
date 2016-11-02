@@ -16,27 +16,24 @@ package dynamicProgramming;
  */
 
 public class _198_HouseRobber {
-	
+    
     public int rob(int[] nums) {
         
-        if (nums == null || nums.length == 0) return 0;
-        
-        int preRobbed = nums[0];
-        int preNotRobbed = 0;
-        
         int len = nums.length;
-        for (int house = 1; house < len; house++) {
-            int money = nums[house];
+        if (len == 0) return 0;
+        
+        int rob = nums[0];
+        int noRob = 0;
+        
+        for (int idx = 1; idx < len; idx++) {
+            int val = nums[idx];
             
-            int currentRob = preNotRobbed + money;
-            int currentNotRob = Math.max(preRobbed, preNotRobbed);
-            
-            preRobbed = currentRob;
-            preNotRobbed = currentNotRob;
-            
+            int temp = rob;
+            rob = noRob + val;
+            noRob = Math.max(temp, noRob);
         }
         
-        return Math.max(preRobbed, preNotRobbed);
+        return Math.max(rob, noRob);
         
     }
 

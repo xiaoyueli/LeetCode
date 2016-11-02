@@ -13,18 +13,17 @@ import java.util.Stack;
 public class _9_PalindromeNumber {
     
     public boolean isPalindrome(int x) {
+        
         if (x < 0) return false;
+        int sum = 0;
+        int num = x;
         
-        int val = x;
-        int res = 0;
-        
-        while (val > 0) {
-            res = res * 10 + val % 10;
-            val /= 10;
+        while (num != 0) {
+            sum  = sum * 10 + num % 10;
+            num /= 10;
         }
         
-        if (x == res) return true;
-        return false;
+        return sum == x;
         
     }
     

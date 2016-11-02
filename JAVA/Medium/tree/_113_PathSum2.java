@@ -30,34 +30,31 @@ public class _113_PathSum2 {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
         
         List<List<Integer>> res = new ArrayList<>();
-        List<Integer> sub = new ArrayList<Integer>();
-        helper(root, 0, sum, sub, res);
+        List<Integer> ls = new ArrayList<Integer>();
+        
+        helper(res, ls, root, sum, 0);
         
         return res;
-        
     }
     
-    public void helper(TreeNode td, int cur, int sum, List<Integer> list, List<List<Integer>> res) {
-        if (td == null) return;
-        cur += td.val;
-        list.add(td.val);
-        if (td.left == null && td.right == null) {
-            if (cur == sum) {
-                List<Integer> newOne = new ArrayList<Integer>(list);
-                res.add(newOne);
+    private void helper(List<List<Integer>> res, List<Integer> ls, TreeNode root, int sum, int cur) {
+        
+        if (root == null) return;
+        
+        ls.add(root.val);
+        
+        if (root.left == null && root.right == null) {
+            if (sum == cur + root.val) {
+                res.add(new ArrayList<Integer>(ls));
             }
+            ls.remove(ls.size() - 1);
             return;
         }
         
-        if (td.left != null) {
-            helper(td.left, cur, sum, list, res);
-            list.remove(list.size() - 1);
-        }
+        helper(res, ls, root.left, sum, cur + root.val);
+        helper(res, ls, root.right, sum, cur + root.val);
         
-        if (td.right != null) {
-            helper(td.right, cur, sum, list, res);
-            list.remove(list.size() - 1);
-        }
+        ls.remove(ls.size() - 1);
         
     }
 

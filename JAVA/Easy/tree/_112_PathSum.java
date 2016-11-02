@@ -24,19 +24,17 @@ public class _112_PathSum {
     
     public boolean hasPathSum(TreeNode root, int sum) {
         
-        if (root == null) return false;
+        return helper(root, sum, 0);
         
-        return helper (root, 0, sum);
     }
     
-    public boolean helper(TreeNode td, int curSum, int target) {
-        if (td == null) return false;
-        if (td.left == null && td.right == null) return (td.val + curSum) == target;
+    private boolean helper(TreeNode root, int sum, int cur) {
+        if (root == null) return false;
+        if (root.left == null && root.right == null) return sum == cur + root.val;
         
-        boolean left = helper(td.left, td.val + curSum, target);
-        boolean right = helper(td.right, td.val + curSum, target);
+        if (helper(root.left, sum, cur + root.val)) return true;
+        return helper(root.right, sum, cur + root.val);
         
-        return left || right;
     }
 
     public static void main(String[] args) {

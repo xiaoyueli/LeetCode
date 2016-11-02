@@ -24,7 +24,20 @@ package tree;
 
 public class _235_LowestCommonAncestorofaBinarySearchTree {
     
+    
+    // 递归
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        
+        if (p == null || q == null || root == null) return null;
+        if (root.val > p.val && root.val > q.val) return lowestCommonAncestor(root.left, p, q);
+        if (root.val < p.val && root.val < q.val) return lowestCommonAncestor(root.right, p, q);
+        
+        return root;
+        
+    }
+    
+    // 迭代
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
         
         if (root == null) return null;
         if (p == null) return q;
