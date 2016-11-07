@@ -15,27 +15,26 @@ public class _20_ValidParentheses {
     
     public boolean isValid(String s) {
         
-        Stack<Character> stack = new Stack<Character>();
         char[] seq = s.toCharArray();
-        int len = seq.length;
         
-        for (int idx = 0; idx < len; idx++) {
-            char c = seq[idx];
-            if (c == '(' || c == '[' || c == '{') stack.push(c);
-            else if (stack.isEmpty()) return false;
-            else {
-                char other = stack.pop();
-                if (other == '(') {
-                    if (c != ')') return false;
-                }
-                else if (other == '[') {
-                    if (c != ']') return false;
-                }
-                else if (c != '}') return false;
+        Stack<Character> stack = new Stack<Character>();
+        
+        for (char c: seq) {
+            if (c == ')' || c == ']' || c == '}') {
+                if (stack.isEmpty()) return false;
+                char left = stack.pop();
+                if (!isPair(left, c)) return false;
             }
+            else stack.push(c);
         }
         
-        if (stack.isEmpty()) return true;
+        return stack.isEmpty();
+    }
+    
+    private boolean isPair(char l, char r) {
+        if (l == '(') return r == ')';
+        if (l == '{') return r == '}';
+        if (l == '[') return r == ']';
         return false;
     }
     

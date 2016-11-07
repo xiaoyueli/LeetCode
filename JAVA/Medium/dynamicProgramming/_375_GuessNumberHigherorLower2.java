@@ -45,22 +45,23 @@ public class _375_GuessNumberHigherorLower2 {
         
         int[][] dp = new int[n + 1][n + 1];
         
-        return helper(dp, 1, n, n);
+        return helper(dp, 1, n);
         
     }
     
-    public int helper(int[][] dp, int sta, int end, int n) {
+    private int helper(int[][] dp, int sta, int end) {
         if (sta >= end) return 0;
         
         if (dp[sta][end] != 0) return dp[sta][end];
         
         int min = Integer.MAX_VALUE;
-        for (int val = sta; val <= end; val++) {
-            int cost = val + Math.max(helper(dp, sta, val - 1, n), helper(dp, val + 1, end, n));
-            if (cost < min) min = cost;
+        for (int num = sta; num <= end; num++) {
+            int val = num + Math.max(helper(dp, sta, num - 1), helper(dp, num + 1, end));
+            if (val < min) min = val;
         }
         
         dp[sta][end] = min;
+        
         return min;
     }
 

@@ -22,7 +22,37 @@ import java.util.HashMap;
 
 public class _290_WordPattern {
     
+    
+    // way1
     public boolean wordPattern(String pattern, String str) {
+        
+        char[] cseq = pattern.toCharArray();
+        String[] sseq = str.split(" ");
+        
+        int len = cseq.length;
+        if (len != sseq.length) return false;
+        
+        int[] locp = new int[26];
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        for (int idx = 0; idx < len; idx++) {
+            char c = cseq[idx];
+            String s = sseq[idx];
+            if (locp[c - 'a'] == 0 && !map.containsKey(s)) {
+                locp[c - 'a'] = idx + 1;
+                map.put(s, idx + 1);
+            }
+            else if (locp[c - 'a'] == 0) return false;
+            else if (!map.containsKey(s)) return false;
+            else if (locp[c - 'a'] != map.get(s)) return false;
+        }
+        
+        return true;
+        
+    }
+    
+    
+    // way2
+    public boolean wordPattern2(String pattern, String str) {
         
         String[] arr = str.split(" ");
         char[] pat = pattern.toCharArray();

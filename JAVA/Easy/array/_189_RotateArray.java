@@ -1,58 +1,76 @@
 package array;
 
+/**
+ * 
+ * @author xiaoyue
+ * 
+ * Rotate an array of n elements to the right by k steps.
+ * 
+ * For example, with n = 7 and k = 3, the array [1,2,3,4,5,6,7] is rotated to [5,6,7,1,2,3,4].
+ * 
+ * Note:
+ * Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.
+ * 
+ * 思路;
+ * k 对 len 取模 就是需要移动的步数 i； 然后将后i个数移到前面
+ * 技巧：
+ * 将前len - i 个数反转， 然后对整个数组反转，然后再对前i个数反转
+ * 
+ * 4 3 2 1 5 6 7 --> 7 6 5 1 2 3 4 --> 5 6 7 1 2 3 4
+ *
+ */
+
 public class _189_RotateArray {
     
+    
+    // in place
     public void rotate(int[] nums, int k) {
         
-        // METHOD_1
-        // int n = nums.length;
-        // if (n <= 1) return; 
-        // int[] alt = new int[n];
-        // for (int idx = 0; idx < n; idx++) {
-        //     if (idx + k < n) alt[idx + k] = nums[idx];
-        //     else {
-        //         int pos = idx + k;
-        //         while (pos >= n) {
-        //             pos -= n;
-        //         }
-        //         alt[pos] = nums[idx];
-        //     }
-        // }
+        int len = nums.length;
         
-        // for (int idx = 0; idx < n; idx++) {
-        //     nums[idx] = alt[idx];
-        // }
+        k = k % len;
         
+        reverse(nums, 0, len - k - 1);
+        reverse(nums, 0, len - 1);
+        reverse(nums, 0, k - 1);
         
-        // METHOD_2, in place
-        int n = nums.length;
-        boolean[] visited = new boolean[n];
-        for (int idx = 0; idx < n ; idx++) {
-            if (!visited[idx]) {
-                rotate(idx, k, nums, visited);
-            }
+    }
+    
+    private void reverse(int[] nums, int sta, int end) {
+        
+        while (sta < end) {
+            swap(nums, sta++, end--);
         }
     }
     
-    public void rotate(int pos, int k, int[] nums, boolean[] visited) {
-        int length = visited.length;
-        int alt = nums[pos];
-        while (!visited[pos]) {
-            visited[pos] = true;
-            if (pos + k < length) {
-                int temp = nums[pos + k];
-                nums[pos + k] = alt;
-                alt = temp;
-                pos = pos + k;
-            }
-            else {
-                int next = pos + k - length;
-                while (next >= length) next -= length;
-                int temp = nums[next];
-                nums[next] = alt;
-                alt = temp;
-                pos = next;
-            }
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    
+    
+    // extra space
+    public void rotate2(int[] nums, int k) {
+        
+        int len = nums.length;
+        
+        int[] temp = new int[len];
+        for (int idx = 0; idx < len; idx++) {
+            temp[idx] = nums[idx];
         }
-    }   
+        
+        k = k % len;
+        
+        int i = 0;
+        for (int idx = len - k; idx < len; idx++) {
+            nums[i++] = temp[idx];
+        }
+        
+        for (int idx = 0; idx < len - k; idx++) {
+            nums[i++] = temp[idx];
+        }
+        
+        
+    }  
 }

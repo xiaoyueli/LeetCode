@@ -8,37 +8,29 @@ public class _14_LongestCommonPrefix {
 
     public String longestCommonPrefix(String[] strs) {
         
-        int cnt = 0;
-        int len = strs.length;
-        if (len == 0) return "";
-        if (len == 1) return strs[0];
-        boolean flag = true;
-        int ceiling = strs[0].length();
-        
-        while (cnt < ceiling) {
-            char c = strs[0].charAt(cnt);
-            for (int idx = 1; idx < len; idx++) {
-                if (cnt >= strs[idx].length()) {
-                    flag = false;
+        StringBuilder sb = new StringBuilder();
+        int length = strs.length;
+        int len = 0;
+        boolean isCom = true;
+
+        while (length > 0) {
+            
+            if (strs[0].length() == len) break;
+            
+            char c = strs[0].charAt(len);
+            for (int idx = 1; idx < length; idx++) {
+
+                if (strs[idx].length() == len || strs[idx].charAt(len) != c) {
+                    isCom = false;
                     break;
                 }
-                else {
-                    char other = strs[idx].charAt(cnt);
-                    if (c != other) {
-                        flag = false;
-                        break;
-                    } 
-                }
             }
-            
-            if (!flag) break;
-            
-            cnt++;
+            if (!isCom) break;
+            sb.append(c);
+            len++;
         }
         
-        
-        if (cnt == 0) return "";
-        return strs[0].substring(0, cnt);
+        return sb.toString();
         
     }
     

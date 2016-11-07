@@ -25,31 +25,24 @@ package twoPointers;
  */
 public class _19_RemoveNthNodeFromEndofList {
     
-    public ListNode removeNthFromEnd(ListNode head, int n) {      
-
-        ListNode sec = head;
-        ListNode fir = head;
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        
+        ListNode tail = head;
+        
         while (n > 0) {
-            sec = sec.next;
+            tail = tail.next;
             n--;
         }
-
-        while (sec != null && sec.next != null) {
-            fir = fir.next;
-            sec = sec.next;
+        
+        if (tail == null) return head.next;
+        ListNode cur = head;
+        
+        while (tail.next != null) {
+            cur = cur.next;
+            tail = tail.next;
         }
         
-        ListNode temp;
-        if (sec == null) {
-            temp = head;
-            head = head.next;
-            temp.next = null;
-        }
-        else {
-            temp = fir.next;
-            fir.next = temp.next;
-            temp.next = null; 
-        }
+        cur.next = cur.next.next;
         
         return head;
     }

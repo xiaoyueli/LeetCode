@@ -1,5 +1,6 @@
 package hashtable;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 /**
@@ -9,31 +10,67 @@ import java.util.Hashtable;
 
 public class _205_IsomorphicStrings {
     
+    
+    // 方法1
     public boolean isIsomorphic(String s, String t) {
         
-        if (s.length() != t.length()) return false;
+        int len = s.length();
+        if (len != t.length()) return false;
         
-        int[] ls = new int[128];
-        int[] lt = new int[128];
+        int[] marks = new int[128];
+        int[] markt = new int[128];
         
-        for (int idx = 0; idx < s.length(); idx++) {
-
-            if (ls[s.charAt(idx)] != 0 && lt[t.charAt(idx)] != 0) {
-                int lastIndexS = ls[s.charAt(idx)];
-                int lastIndexT = lt[t.charAt(idx)];
-                if (lastIndexS != lastIndexT) return false;
-            } 
-            else if (ls[s.charAt(idx)] != 0) return false;
-            else if (lt[t.charAt(idx)] != 0) return false;
-            
-            ls[s.charAt(idx)] = idx + 1;
-            lt[t.charAt(idx)] = idx + 1;
+        for (int idx = 0; idx < len; idx++) {
+            char cs = s.charAt(idx);
+            char ct = t.charAt(idx);
+            if (marks[cs] == 0 && markt[ct] == 0) {
+                marks[cs] = idx + 1;
+                markt[ct] = idx + 1;
+            }
+            else if (marks[cs] == 0) return false;
+            else if (markt[ct] == 0) return false;
+            else if (marks[cs] != markt[ct]) return false;
+        }
+        
+        return true;   
+    }
+    
+    // 方法2
+    public boolean isIsomorphic1(String s, String t) {
+        
+        int len = s.length();
+        if (len != t.length()) return false;
+        
+        int[] marks = helper(s);
+        int[] markt = helper(t);
+        
+        for (int idx = 0; idx < len; idx++) {
+            if (marks[idx] != markt[idx]) return false;
         }
         
         return true;
         
     }
     
+    private int[] helper(String s) {
+        
+        char[] seq = s.toCharArray();
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        int len = seq.length;
+        int[] res = new int[len];
+        
+        for (int idx = 0; idx < len; idx++) {
+            char c = seq[idx];
+            if (map.containsKey(c)) res[idx] = map.get(c);
+            else {
+                res[idx] = idx;
+                map.put(c, idx);
+            }
+        }
+        return res;
+    }
+    
+    // 方法3
     public boolean isIsomorphic2(String s, String t) {
         if (s.length() != t.length()) return false;
         Hashtable<Character, Character> tableS = new Hashtable<Character, Character>();

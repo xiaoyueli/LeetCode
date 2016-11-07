@@ -1,4 +1,4 @@
-package array;
+package math;
 
 /**
  * Given an array of integers A and let n to be its length.
@@ -36,30 +36,23 @@ public class _396_RotateFunction {
     public int maxRotateFunction(int[] A) {
         
         int len = A.length;
-        if (len == 0 || A == null) return 0;
-        if(len == 1) return 0;
+        int sum = 0;
+        int sumOfElement = 0;
         
-        int sum = compute(A);
+        for (int idx = 0; idx < len; idx++) {
+            sum += idx * A[idx];
+            sumOfElement += A[idx];
+        }
+        
         int max = sum;
-        int digitSum = 0;
-        for (int i: A) digitSum += i;
         
         for (int idx = len - 1; idx > 0; idx--) {
-            sum += digitSum - A[idx] * len;
+            sum += sumOfElement - len * A[idx];
             if (sum > max) max = sum;
         }
         
         return max;
-        
-    }
     
-    public int compute(int[] nums) {
-        int sum = 0;
-        int len = nums.length;
-        for (int idx = 0; idx < len; idx++) {
-            sum += idx * nums[idx];
-        }
-        return sum;
     }
 
 }

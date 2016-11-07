@@ -29,27 +29,29 @@ import java.util.List;
 
 public class _22_GenerateParentheses {
     
-    List<String> res;
-    int target;
     public List<String> generateParenthesis(int n) {
-        target = n;
-        res = new ArrayList<String>();
-        addPar(1, 0, "(");
+        
+        List<String> res = new ArrayList<String>();
+        char[] seq = new char[2 * n];
+        
+        helper(res, seq, 0, 0, 0, n);
+        
         return res;
     }
     
-    public void addPar(int left, int right, String s) {
-        if (left == right && left == target) {
-            res.add(s);
+    private void helper(List<String> res, char[] seq, int pos, int left, int right, int len) {
+        if (left == len && right == len) {
+            res.add(new String(seq));
             return;
         }
 
-        if (left > target) return;
+        if (left > len) return;
         if (right > left) return;
         
-        addPar(left + 1, right, s + "(");
-        addPar(left, right + 1, s + ")");
-        
+        seq[pos] = '(';
+        helper(res, seq, pos + 1, left + 1, right, len);
+        seq[pos] = ')';
+        helper(res, seq, pos + 1, left, right + 1, len);
     }
 
 }

@@ -51,8 +51,10 @@ public class _165_CompareVersionNumbers {
     }
     
     public static void main(String[] args) {
-        _165_CompareVersionNumbers test = new _165_CompareVersionNumbers();
-        test.compareVersion("1.0", "1");
+//        _165_CompareVersionNumbers test = new _165_CompareVersionNumbers();
+//        test.compareVersion("1.0", "1");
+        
+        System.out.println("0".split("\\.").length);
     }
 
 }
