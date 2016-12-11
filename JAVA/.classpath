@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="Easy"/>
 	<classpathentry kind="src" path="Medium"/>
 	<classpathentry kind="src" path="Hard"/>
+	<classpathentry kind="src" path="interview"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

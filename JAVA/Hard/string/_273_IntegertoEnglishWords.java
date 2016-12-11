@@ -23,57 +23,48 @@ public class _273_IntegertoEnglishWords {
 
     public String numberToWords(int num) {
         
-        String[] digits = new String[]{"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", 
-                                        "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
-                                        
+        if (num == 0) return "Zero";
+        
         StringBuilder sb = new StringBuilder();
+        
         int cnt = 0;
-
         while (num != 0) {
-
             int chunk = num % 1000;
             num /= 1000;
-
-            if (chunk != 0) {
-                if (cnt > 0) sb.insert(0, getCarry(cnt));
-                sb.insert(0, getChunk(digits, chunk));
-            }
+            if (chunk != 0) sb.insert(0, convert(chunk, cnt));
             cnt++;
-            
         }
         
-        int len = sb.length();
-        if (len == 0) return "Zero";
-        sb.deleteCharAt(len - 1);
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+        
+    }
+    
+    private String convert(int num, int pos) {
+        String[] carry = new String[]{"", "Thousand", "Million", "Billion"};
+        String[] nums = new String[]{"Zero", "One", "Two", "Three","Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+            "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty",
+            "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        
+        
+        StringBuilder sb = new StringBuilder();
+        int hundred = num / 100;
+        if (hundred != 0) sb.append(nums[hundred] + " Hundred ");
+        num %= 100;
+        if (num != 0 && num < 20) {
+            sb.append(nums[num] + " ");
+        }
+        else if (num >= 20) {
+        
+            int tens = num / 10;
+            sb.append(nums[18 + tens] + " ");
+            num %= 10;
+            if (num != 0) sb.append(nums[num] + " ");
+        }
+        if (pos != 0) sb.append(carry[pos] + " ");
         
         return sb.toString();
-    }
-    
-    private String getCarry(int i) {
         
-        switch(i) {
-            case 1 : return "Thousand ";
-            case 2 : return "Million ";
-            case 3 : return "Billion ";
-        }
-        
-        return "";
-    }
-    
-    private String getChunk(String[] digits, int num) {
-        
-        String res = "";
-        int hundred = num / 100;
-        if (hundred > 0) res += digits[hundred] + " Hundred ";
-        num %= 100;
-        if (num == 0) return res;
-        if (num <= 20) res += digits[num] + " ";
-        else {
-            res += digits[20 + (num / 10 - 2)] + " ";
-            if (num % 10 != 0) res += digits[num % 10] + " ";
-        }
-        
-        return res;
     }
 
 }

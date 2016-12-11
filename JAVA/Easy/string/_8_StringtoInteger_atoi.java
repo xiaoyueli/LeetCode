@@ -1,4 +1,4 @@
-package math;
+package string;
 
 /**
  * Implement atoi to convert a string to an integer.
@@ -46,5 +46,11 @@ public class _8_StringtoInteger_atoi {
         }
 
         return (int) res;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(Integer.MIN_VALUE);
+        System.out.println(Integer.MAX_VALUE);
+
     }
 }
