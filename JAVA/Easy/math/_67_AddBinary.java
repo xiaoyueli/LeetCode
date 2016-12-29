@@ -13,39 +13,32 @@ public class _67_AddBinary {
     
     public String addBinary(String a, String b) {
         
-        char[] ca = a.toCharArray();
-        char[] cb = b.toCharArray();
+        if(a.length() > b.length()) return addBinary(b, a);
         
-        String res;
+        StringBuilder sb = new StringBuilder();
         
-        if (ca.length > cb.length) res = compute(ca, cb);
-        else res = compute(cb, ca);
+        int i = a.length() - 1;
+        int gap = b.length() - a.length();
+        int carry = 0;
         
-        return res;
-    }
-    
-    public String compute(char[] a, char[] b) {
-        
-        int idxb = b.length - 1;
-        int idxa = a.length - 1;
-        int sum = 0;
-        while (idxb >= 0) {
-            int vala = a[idxa] - '0';
-            int valb = b[idxb--] - '0';
-            int val = (sum + vala + valb) % 2;
-            sum = (sum + vala + valb) / 2;
-            a[idxa--] = (char)(val + '0');
+        while (i >= 0) {
+            int sum = a.charAt(i) - '0' + (b.charAt(gap + i) - '0') + carry;
+            sb.insert(0, sum % 2);
+            carry = sum / 2;
+            i--;
         }
         
-        while (idxa >= 0) {
-            int vala = a[idxa] - '0';
-            int val = (sum + vala) % 2;
-            sum = (sum + vala) / 2;
-            a[idxa--] = (char)(val + '0');
+        i = gap - 1;
+        
+        while (i >= 0) {
+            int sum = b.charAt(i--) - '0' + carry;
+            sb.insert(0, sum % 2);
+            carry = sum / 2;
         }
         
-        String res = new String(a);
-        if (sum > 0) res = sum + res;
-        return res;
+        if (carry == 1) sb.insert(0, 1);
+        
+        return sb.toString();
+        
     }
 }

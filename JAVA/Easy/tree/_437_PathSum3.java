@@ -1,8 +1,5 @@
 package tree;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 
  * @author xiaoyue
@@ -32,46 +29,71 @@ import java.util.List;
  * 3. -3 -> 11
  * 
  * 思路：
- * 从leaf 从下自上累计和，
+ * 1. dfs root, 然后+dfs左右子数的和
+ * 整个问题将一个大树分解成左右小树的问题
+ * 
+ * 
+ * 2 .从leaf 从下自上累计和，
  * 每一层 在下一层的和的基础上加上当前node的value, 及单独的node.val，然后累计计算此刻有多少值==sum,
  *
  */
 
 public class _437_PathSum3 {
     
-    int cnt;
+    
     public int pathSum(TreeNode root, int sum) {
         
-        helper(root, sum);
-        
-        return cnt;
+        if (root == null) return 0;
+        return helper(root, 0, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
     }
     
-    private List<Integer> helper(TreeNode root, int sum) {
+    private int helper(TreeNode root, int val, int sum) {
         
-        if (root == null) return null;
+        if (root == null) return 0;
         
-        List<Integer> res = new ArrayList<Integer>();
-        res.add(root.val);
-        List<Integer> left = helper(root.left, sum);
-        List<Integer> right = helper(root.right, sum);
+        int res = 0;
+        if (val + root.val == sum) res++;
         
-        
-        addAll(res, left, root.val);
-        addAll(res, right, root.val);
-        
-        for (int num: res) if (num == sum) cnt++;
+        res += helper(root.left,  val + root.val, sum);
+        res += helper(root.right, val + root.val, sum);
         
         return res;
-
     }
     
-    private void addAll(List<Integer> res, List<Integer> ls, int val) {
-        if (ls == null) return;
-        
-        for (int num: ls) {
-            res.add(val + num);
-        }
-    }
+    
+//    int cnt;
+//    public int pathSum(TreeNode root, int sum) {
+//        
+//        helper(root, sum);
+//        
+//        return cnt;
+//    }
+//    
+//    private List<Integer> helper(TreeNode root, int sum) {
+//        
+//        if (root == null) return null;
+//        
+//        List<Integer> res = new ArrayList<Integer>();
+//        res.add(root.val);
+//        List<Integer> left = helper(root.left, sum);
+//        List<Integer> right = helper(root.right, sum);
+//        
+//        
+//        addAll(res, left, root.val);
+//        addAll(res, right, root.val);
+//        
+//        for (int num: res) if (num == sum) cnt++;
+//        
+//        return res;
+//
+//    }
+//    
+//    private void addAll(List<Integer> res, List<Integer> ls, int val) {
+//        if (ls == null) return;
+//        
+//        for (int num: ls) {
+//            res.add(val + num);
+//        }
+//    }
 
 }

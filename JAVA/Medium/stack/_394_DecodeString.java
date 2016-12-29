@@ -34,76 +34,68 @@ import java.util.Stack;
 
 public class _394_DecodeString {
     
-    char[] str;
-    int len;
     public String decodeString(String s) {
-        
-        str = s.toCharArray();
-        len = str.length;
-        Stack<String> stack = new Stack<String>();
-        if (len == 0) return s;
-        
-        int sta = -1;
-        int sum = 0;
-        // "3[a]2[bc]"
-        
-        for (int idx = 0; idx < len; idx++) {
-            char cur = str[idx];
 
-            if (isNum(cur)) {
-                if (sta != -1) {
-                    stack.push(s.substring(sta, idx));
-                    sta = -1;
+        StringBuilder sb = new StringBuilder();
+        Stack<String> stack = new Stack<String>();
+        int staNum = -1;
+        int staChar = -1;
+        
+        for(int i = 0; i < s.length(); i++) {
+            char cur = s.charAt(i);
+            if (isNum(cur) && staNum == -1) {
+                staNum = i;
+                if (staChar != -1) {
+                    stack.push(s.substring(staChar, i));
+                    staChar = -1;
                 }
-                sum = sum * 10 + (cur - '0');    
             }
             else if (cur == '[') {
-                stack.push(sum + "");
-                sum = 0;
+                stack.push(s.substring(staNum, i));
+                staNum = -1;
             }
             else if (cur == ']') {
                 
-                String sub = "";
-                if (sta != -1) {
-                    sub = s.substring(sta, idx);
-                    sta = -1;
+                if (staChar != -1) {
+                    stack.push(s.substring(staChar, i));
+                    staChar = -1;
                 }
-                
-                if (!isNum(stack.peek().charAt(0))) {
-                    while (!isNum(stack.peek().charAt(0))) {
-                        sub = stack.pop() + sub;
-                    }
-                }
-                
-                StringBuffer sb = new StringBuffer();
-                int repeat = Integer.parseInt(stack.pop());
-                while (repeat != 0) {
-                    sb.append(sub);
-                    repeat--;
-                }
-                stack.push(sb.toString());
-                
+                concatenateString(stack);
             }
-            else if (sta == -1) sta = idx;
-            
+            else if (!isNum(cur) && staChar == -1) staChar = i;
         }
         
-        if (sta != -1) stack.push(s.substring(sta, len));
-        
-        if (stack.isEmpty()) return s;
-        String res = stack.pop();
-        while (!stack.isEmpty()) {
-            res = stack.pop() + res;
+        if (staChar != -1) {
+            stack.push(s.substring(staChar, s.length()));
+            concatenateString(stack);
         }
-
-        return res;
         
+        while (!stack.isEmpty()) sb.insert(0, stack.pop());
+        
+        return sb.toString();
     }
     
-    public boolean isNum(char c) {
-        int value = c - '0';
-        if (value >= 0 && value <= 9) return true;
-        return false;
+    private void concatenateString(Stack<String> stack) {
+
+        
+        StringBuilder sb = new StringBuilder();
+        
+        while (!stack.isEmpty() && !isNum(stack.peek().charAt(0))) {
+            sb.insert(0, stack.pop());
+        }
+        
+        if (!stack.isEmpty()) {
+            String baseStr = sb.toString();
+            sb = new StringBuilder();
+            int loop = Integer.parseInt(stack.pop());
+            for (int i = 0; i < loop; i++) sb.append(baseStr);
+        }
+   
+        stack.push(sb.toString());
+    }
+    
+    private boolean isNum(char c) {
+        return c >= '0' && c <= '9';
     }
 
     public static void main(String args[]) {

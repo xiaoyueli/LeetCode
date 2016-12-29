@@ -27,36 +27,35 @@ public class _25_ReverseNodesin_k_Group {
     
     public ListNode reverseKGroup(ListNode head, int k) {
         
-        if (head == null) return null;
+        if (head == null || head.next == null) return head;
         
-        int len = count(head);
-        if (len < k) return head;
+        ListNode cur = head;
+        int i = 1;
         
-        ListNode rear = head;
+        while (i++ < k && cur.next != null) cur = cur.next;
+
+        if (i <= k) return head;
+        
+        ListNode temp = cur.next;
+        cur.next = null;
+        ListNode newHead = reverse(head);
+        
+        head.next = reverseKGroup(temp, k);
+        
+        return newHead;
+        
+    }
+    
+    private ListNode reverse(ListNode head) {
+        
         ListNode cur = null;
-        
-        int cnt = 0;
-        while (cnt < k) {
+        while (head != null) {
             ListNode temp = head.next;
             head.next = cur;
             cur = head;
             head = temp;
-            cnt++;
         }
-        
-        rear.next = reverseKGroup(head, k);
-        
         return cur;
-        
-    }
-    
-    private int count(ListNode node) {
-        int cnt = 0;
-        while (node != null) {
-            node = node.next;
-            cnt++;
-        }
-        return cnt;
     }
 
 }

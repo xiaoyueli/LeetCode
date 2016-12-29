@@ -23,29 +23,26 @@ package array;
 public class _41_FirstMissingPositive {
     
     public int firstMissingPositive(int[] nums) {
-
-        int len = nums.length;
-        int idx = 0;
-             
-        while (idx < len) {
-            
-            if (nums[idx] > 0 && nums[idx] != idx + 1 && nums[idx] <= len && nums[idx] != nums[nums[idx] - 1]) {
-                swap(nums, idx, nums[idx] - 1);
-            }
-            else idx++;
+        
+        if (nums.length == 0) return 1;
+        
+        int i = 0;
+        while (i < nums.length) {
+            if (nums[i] <= 0 || nums[i] > nums.length) i++;
+            else if (nums[i] - 1 != i && nums[nums[i] - 1] != nums[i]) swap(nums, nums[i] - 1, i);
+            else i++;
         }
         
-        idx = 0;
-        while (idx < len && nums[idx] == idx + 1) idx++;
+        i = 0;
+        while (i < nums.length && nums[i] == i + 1) i++;
         
-        return idx + 1;
-        
+        return i + 1;
     }
     
-    private void swap(int[] seq, int i, int j) {
-        int temp = seq[i];
-        seq[i] = seq[j];
-        seq[j] = temp;
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 
 }

@@ -1,7 +1,5 @@
 package zillow;
 
-import java.util.ArrayList;
-
 public class Heapify {
     
     public void heapify(int[] A) {

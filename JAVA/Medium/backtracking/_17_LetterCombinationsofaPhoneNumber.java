@@ -19,47 +19,31 @@ import java.util.List;
 
 public class _17_LetterCombinationsofaPhoneNumber {
     
-    public List<String> letterCombinations(String digits) {     
+    public List<String> letterCombinations(String digits) {
         
         List<String> res = new ArrayList<String>();
-        char[][] seq = new char[][]{{}, 
-                                    {},
-                                    {'a','b','c'},
-                                    {'d','e','f'},
-                                    {'g','h','i'},
-                                    {'j','k','l'},
-                                    {'m','n','o'},
-                                    {'p','q','r','s'},
-                                    {'t','u','v'},
-                                    {'w','x','y','z'}};
-                                        
-        char[] digs = digits.toCharArray();
-        int[] nums = new int[digs.length];
-        int len = nums.length;
-        if (len == 0) return res;
+        String[][] map = new String[][]{{""}, {""}, {"a", "b", "c"}, {"d", "e", "f"}, {"g", "h", "i"}, {"j", "k", "l"},
+        {"m", "n", "o"}, {"p", "q", "r", "s"}, {"t", "u", "v"}, {"w", "x", "y", "z"}};
         
-        for (int idx = 0; idx < len; idx++) nums[idx] = digs[idx] - '0';
-        char[] coms = new char[len];
         
-        helper(res, nums, seq, coms, 0);
+        if (digits.length() == 0) return res;
         
-        return res;      
+        helper(res, map, digits, "", 0, digits.length());
+        
+        return res;
+        
     }
     
-    public void helper(List<String> res, int[] nums, char[][] seq, char[] coms, int pos) {
-        int len = nums.length;
+    private void helper(List<String> res, String[][] map, String digits, String path, int pos, int len) {
         if (pos == len) {
-            res.add(new String(coms));
+            res.add(path);
             return;
         }
         
-        int seqlen = seq[nums[pos]].length;
-        
-        for (int idx = 0; idx < seqlen; idx++) {
-            coms[pos] = seq[nums[pos]][idx];
-            helper(res, nums, seq, coms, pos + 1);
+        String[] strs = map[digits.charAt(pos) - '0'];
+        for (int i = 0; i < strs.length; i++) {
+            helper(res, map, digits, path + strs[i], pos + 1, len);
         }
-   
     }
 
 }

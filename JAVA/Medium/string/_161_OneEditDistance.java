@@ -63,5 +63,30 @@ public class _161_OneEditDistance {
     }
     
     
-
+    // 解锁后跑一下
+    public boolean solve(String s, String t) {
+        
+        if (s.length() == t.length()) {
+            int cnt = 0;
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) != t.charAt(i)) cnt++;
+                if (cnt > 1) return false;
+            }
+            return cnt == 1;
+        }
+        
+        if (s.length() > t.length()) return solve(t, s);
+        
+        if (s.length() + 1 != t.length()) return false;
+        
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != t.charAt(i)) {
+                return solve(s.substring(i, s.length()), t.substring(i + 1, t.length()));
+            }
+        }
+        
+        return true;
+        
+    }
+    
 }

@@ -35,6 +35,7 @@ public class _253_MeetingRooms2 {
         if (intervals == null || intervals.length == 0) return 0;
         
         Arrays.sort(intervals, new Comparator<Interval>() {
+            @Override
             public int compare(Interval i1, Interval i2) {
                 return i1.start - i2.start;
             }
@@ -42,7 +43,8 @@ public class _253_MeetingRooms2 {
         
         PriorityQueue<Interval> que = new PriorityQueue<Interval>(new Comparator<Interval>(){
             
-           public int compare(Interval i1, Interval i2) {
+           @Override
+        public int compare(Interval i1, Interval i2) {
                return i1.end - i2.end;
            } 
         });

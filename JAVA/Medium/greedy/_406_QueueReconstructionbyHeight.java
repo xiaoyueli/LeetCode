@@ -35,6 +35,7 @@ public class _406_QueueReconstructionbyHeight {
         
         // 先按H将序，再按K升序
         Comparator<int[]> myComH = new Comparator<int[]>() {
+            @Override
             public int compare(int[] a, int[] b) {
                 if (a[0] == b[0]) return a[1] - b[1];
                 else return b[0] - a[0];

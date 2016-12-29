@@ -13,12 +13,15 @@ package dynamicProgramming;
  * 
  * @author xiaoyue
  * 
- * 思路：
- * 用max记录当前有效最大边长
- * 依次扫描每一行记录当前累计的1的数量
- * 当前累计的1的数量大于max,从当前格子往上check有效边长（是否构成正方形）
+ * 思路： dp
+ * 每次加入一个1格子，以当前格子为右下角往左上看，能形成多大的方块
+ * 取决于当前格子上面，左边，左上的格子，分别能形成多大的方块。
+ * 新形成的格子大小等于上面三个位子的最小值+1.
  * 
- * check的时候注意记录当前有效最小值
+ * 0 0 0
+ * 0 0 0
+ * 0 0 0
+ * 
  * 
  *
  */
@@ -27,46 +30,23 @@ public class _221_MaximalSquare {
     
     public int maximalSquare(char[][] matrix) {
         
-        int height = matrix.length;
-        if (height == 0) return 0;
-        int width = matrix[0].length;
+        int rows = matrix.length;
+        if (rows == 0) return 0;
+        int cols = matrix[0].length;
         
-        int[][] dp = new int[height][width];
-          
+        int[][] dp = new int[rows + 1][cols + 1];
         int max = 0;
-        for (int row = 0; row < height; row++) {
-            int cnt = 0;
-            for (int col = 0; col < width; col++) {
-                char val = matrix[row][col];
-                if (val == '1') cnt++;
-                else cnt = 0;
-                dp[row][col] = cnt;
-                if (cnt > max) {
-                    int valid = check(dp, row, col);
-                    if (valid > max) max = valid;    
+        
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= cols; j++) {
+                if (matrix[i - 1][j - 1] == '1') {
+                    dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
+                    if (max < dp[i][j]) max = dp[i][j];
                 }
-                
             }
         }
         
         return max * max;
-    }
-    
-    private int check(int[][] dp, int row, int col) {
-
-        if (row == 0) return 1;
-        int min = dp[row][col];
-        row--;
-        int cnt = 1; // 初始格子为有效格子
-        while (row >=0 && dp[row][col] != 0) {
-
-            min = Math.min(min, dp[row][col]); // 当前格子的长度如果比目前为止最短长度短，更新最短长度
-            if (min <= cnt) break; // 如果当前格子的长度短于上一个格子累计的有效正方形边长则退出，否则有效正方形长度+1，格子再往上移动
-            cnt++;
-            row--;
-        }
-        
-        return cnt;
     }
     public static void main(String[] args) {
         // TODO Auto-generated method stub

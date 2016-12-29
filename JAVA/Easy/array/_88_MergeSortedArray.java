@@ -20,24 +20,16 @@ package array;
 public class _88_MergeSortedArray {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
         
-        int i1 = m - 1;
-        int i2 = n - 1;
-        int i = m + n - 1;
+        int idx = m + n - 1;
         
-        while (i1 >= 0 && i2 >= 0) {
-            int v1 = nums1[i1];
-            int v2 = nums2[i2];
-            if (v1 > v2) {
-                nums1[i--] = v1;
-                i1--;
-            }
-            else {
-                nums1[i--] = v2;
-                i2--;
-            }
+        m--;
+        n--;
+        while (m >= 0 && n >= 0) {
+            if (nums1[m] > nums2[n]) nums1[idx--] = nums1[m--];
+            else nums1[idx--] = nums2[n--];
         }
         
-        while (i2 >= 0) nums1[i--] = nums2[i2--];
+        while (n >= 0) nums1[idx--] = nums2[n--];
         
     }
 }

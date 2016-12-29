@@ -26,55 +26,80 @@ package design;
  */
 
 public class _211_AddandSearchWord_Datastructuredesign {
-
-    // Adds a word into the data structure.
-    class Node {
-        char c;
-        Node[] sons = new Node[26];
-        boolean isWord = false;
-        public Node() {
+    
+    class TreeNode {
+        
+        char val;
+        TreeNode[] sons;
+        boolean isWord;
+        
+        public TreeNode(char val) {
+            this.val = val;
+            sons = new TreeNode[26];
         }
         
-        public Node(char c) {
-            this.c = c;
+        public TreeNode getSon(char val) {
+            return sons[val - 'a'];
         }
+        
+        public void addSon(char val) {
+            sons[val - 'a'] = new TreeNode(val);
+        }
+        
+        public void setWord(boolean val) {
+            isWord = val;
+        }
+        
+        public boolean isWord() {
+            return isWord;
+        }
+        
+        public TreeNode[] getSons() {
+            return sons;
+        }
+        
     }
     
-    Node root = new Node();
-    
-    public void addWord(String word) {
 
-        Node cur = root;
-        for (char c: word.toCharArray()) {
-            Node[] sons = cur.sons;
-            if (sons[c - 'a'] == null) sons[c - 'a'] = new Node(c);
-            cur = sons[c - 'a'];
+    private TreeNode root;
+    
+    public _211_AddandSearchWord_Datastructuredesign() {
+        root = new TreeNode(' ');
+    }
+
+    // Adds a word into the data structure.
+    public void addWord(String word) {
+        
+        char[] seq = word.toCharArray();
+        TreeNode cur = root;
+        for (char val: seq) {
+            if (cur.getSon(val) == null) cur.addSon(val);
+            cur = cur.getSon(val);
         }
-        cur.isWord = true;
+        cur.setWord(true);
     }
 
     // Returns if the word is in the data structure. A word could
     // contain the dot character '.' to represent any one letter.
     public boolean search(String word) {
-
         
-        return dfs(word.toCharArray(), 0, root);
-        
+        return helper(root, word);
     }
     
-    public boolean dfs(char[] seq, int pos, Node cur) {
-        if (pos == seq.length) return cur.isWord;
-        char c = seq[pos];
-        Node[] sons = cur.sons;
-        if (c != '.' && sons[c - 'a'] == null) return false;
-        else if (c != '.') return dfs(seq, pos + 1, sons[c - 'a']);
-        else {
-            for (Node n : sons) {
-                if (n != null && dfs(seq, pos + 1, n)) return true;
+    private boolean helper(TreeNode node, String word) {
+        
+        if (word.length() == 0) return node.isWord();
+        
+        if (word.charAt(0) == '.') {
+            for (TreeNode son: node.getSons()) {
+                if (son != null && helper(son, word.substring(1))) return true;
             }
             return false;
         }
-
+        
+        TreeNode son = node.getSon(word.charAt(0));
+        if (son == null) return false;
+        return helper(son, word.substring(1));
     }
 }
 

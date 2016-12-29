@@ -30,6 +30,7 @@ public class _179_LargestNumber {
         
         Comparator<String> myCom = new Comparator<String>() {
             
+            @Override
             public int compare(String a, String b) {
                 String s1 = a + b;
                 String s2 = b + a;

@@ -36,15 +36,12 @@ public class _91_DecodeWays {
         int len = seq.length;
         int[] dp = new int[len + 1];
         
-        if (len == 0) return 0;
-        
+        if (len == 0) return 0;        
         if (seq[0] == '0') return 0;
-        else dp[1] = 1;
-        
-        if (len == 1) return dp[1];
+
         
         dp[0] = 1; // 处理第一和第二个字符可以组合的初始化。
-
+        dp[1] = 1;
         
         for (int idx = 2; idx <= len; idx++) {
             int cur = seq[idx - 1] - '0';
@@ -58,7 +55,7 @@ public class _91_DecodeWays {
             
             // 当前字符可以与前一个字符组合的情况下，则除前一个字符自身decode的数量， 还要加上与当前字符组合在一起的解得数量
             // 即在前一个字符之前的解的基础上有两种情况，因为需加上前一个字符之前累计的解得数量 
-            if (pre == 1 || pre == 2 && cur >= 0 && cur <= 6) dp[idx] += dp[idx - 2];   
+            if (pre == 1 || pre == 2 && cur <= 6) dp[idx] += dp[idx - 2];   
                                     
 
         }

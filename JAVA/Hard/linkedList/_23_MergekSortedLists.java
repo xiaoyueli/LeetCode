@@ -2,7 +2,6 @@ package linkedList;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
-import java.util.Queue;
 /**
  * 
  * @author xiaoyue
@@ -23,6 +22,7 @@ public class _23_MergekSortedLists {
         
         PriorityQueue<ListNode> pq = new PriorityQueue<ListNode>(new Comparator<ListNode>() {
             
+            @Override
             public int compare(ListNode n1, ListNode n2) {
                 return n1.val - n2.val;
             }
@@ -51,6 +51,7 @@ public class _23_MergekSortedLists {
         
         PriorityQueue<ListNode> pq = new PriorityQueue<ListNode>(new Comparator<ListNode>() {
             
+            @Override
             public int compare(ListNode n1, ListNode n2) {
                 return n1.val - n2.val;
             }

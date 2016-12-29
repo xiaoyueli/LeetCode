@@ -1,8 +1,5 @@
 package zillow;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
  * 
  * @author xiaoyue

@@ -41,10 +41,7 @@ public class _49_GroupAnagrams {
             }
         }
         
-        List<List<String>> res = new ArrayList<>();
-        for (List<String> l: map.values()) {
-            res.add(l);
-        }
+        List<List<String>> res = new ArrayList<>(map.values());
         
         return res;
     }

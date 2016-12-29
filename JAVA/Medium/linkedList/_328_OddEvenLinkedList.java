@@ -26,31 +26,29 @@ package linkedList;
 public class _328_OddEvenLinkedList {
     
     public ListNode oddEvenList(ListNode head) {
+        
         if (head == null || head.next == null) return head;
-            
-        ListNode odd = head;
-        ListNode evenH = head.next;
-        ListNode even = evenH;
-        ListNode cur = evenH.next;
+        
+        ListNode cur = head;
+        ListNode oddT = cur;
+        ListNode evenH = new ListNode(0);
+        ListNode evenT = evenH;
         
         while (cur != null && cur.next != null) {
-            odd.next = cur;
-            odd = odd.next;
-            even.next = cur.next;
-            even = even.next;
-            cur = cur.next.next;
+            oddT = cur;
+            evenT.next = cur.next;
+            evenT = cur.next;
+            cur.next = cur.next.next;
+            cur = cur.next;
         }
         
-        if (cur != null) {
-            odd.next = cur;
-            cur.next = evenH;
-        }
-        else {
-            odd.next = evenH;
-        }
-        even.next = null;
+        evenT.next = null;
+        evenH = evenH.next;
+        if (cur != null) cur.next = evenH;
+        else oddT.next = evenH;
         
-        return head;
+        return head;     
+        
     }
     
 }
