@@ -25,30 +25,28 @@ public class _82_RemoveDuplicatesfromSortedList2 {
     public ListNode deleteDuplicates(ListNode head) {
         
         if (head == null || head.next == null) return head;
-        ListNode cur = head;
-        ListNode distin = new ListNode(0);
-        head = distin;
-        boolean flag = false;
-        while (cur.next != null) {
-            
-            if (cur.val != cur.next.val && !flag) {
-                distin.next = cur;
-                distin = cur;
+        ListNode newHead = new ListNode(0);
+        ListNode rear = newHead;
+        int cnt = 1;
+        
+        while (head != null && head.next != null) {
+            if (head.val == head.next.val) {
+                head = head.next;
+                cnt++;
             }
-            else if (cur.val != cur.next.val) flag = false;
-            else flag = true;
-            cur = cur.next;
+            else {
+                if (cnt == 1) {
+                    rear.next = head;
+                    rear = rear.next;
+                }
+                head = head.next;
+                cnt = 1;
+            }
         }
         
-        if (!flag && cur != null) {
-            distin.next = cur;
-            distin = cur;
-        }
-        distin.next = null;
+        if (cnt == 1) rear.next = head;
+        else rear.next = null;
         
-        head = head.next;
-        
-        return head;
-        
+        return newHead.next;
     }
 }

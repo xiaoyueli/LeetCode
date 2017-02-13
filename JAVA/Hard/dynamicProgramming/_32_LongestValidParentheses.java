@@ -1,5 +1,7 @@
 package dynamicProgramming;
 
+import java.util.Stack;
+
 /**
  * 
  * @author xiaoyue 
@@ -33,6 +35,31 @@ public class _32_LongestValidParentheses {
             else if (i - dp[i] - 1 >=0 && seq[i - dp[i] - 1] == '(') dp[i + 1] = dp[i] + 2 + dp[i - dp[i] - 1];
             if (max < dp[i + 1]) max = dp[i + 1];
         }
+        return max;
+        
+    }
+    
+    
+    // 用stack来存右括号的坐标，遇到左括号时，如果为空，就更新当前有效的最左的坐标。
+    // 否则pop出最近的右括号坐标。之后，当前坐标到stack.peek的坐标差值，就是当前有效的括号长度。依此更新最大值
+    public int longestValidParentheses1(String s) {
+        
+        Stack<Integer> stack = new Stack<Integer>();
+        
+        int left = -1;
+        int max = 0;
+        char[] seq = s.toCharArray();
+        for (int i = 0; i < seq.length; i++) {
+            char cur = seq[i];
+            if (cur == '(') stack.push(i);
+            else if (stack.isEmpty()) left = i;
+            else {
+                stack.pop();
+                if (stack.isEmpty()) max = Math.max(max, i - left);
+                else max = Math.max(max, i - stack.peek());
+            }
+        }
+        
         return max;
         
     }

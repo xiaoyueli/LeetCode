@@ -1,5 +1,7 @@
 package tree;
 
+import java.util.Stack;
+
 /**
  * 
  * @author xiaoyue
@@ -34,6 +36,28 @@ public class _285_Inorder_Successor_in_BST {
         
         if (p.val < root.val) return helper(root.left, p, min, root);
         return helper(root.right, p, root, max);
+    }
+    
+    // iteratively
+    public TreeNode solve(TreeNode root, TreeNode p) {
+        
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        
+        boolean isFound = false;
+        while (root != null || !stack.isEmpty()) {
+            
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            
+            root = stack.pop();
+            if (isFound) return root;
+            if (root == p) isFound = true;
+            root = root.right;
+        }
+        
+        return null;
     }
 
 }

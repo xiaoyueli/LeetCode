@@ -1,6 +1,7 @@
 package twoPointers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Given two arrays, write a function to compute their intersection.
@@ -43,5 +44,32 @@ public class _350_IntersectionofTwoArrays2 {
         int[] res = new int[idx];
         for (int i = 0; i < idx; i++) res[i] = temp[i];
         return res;
+    }
+    
+    public int[] intersect2(int[] nums1, int[] nums2) {
+        
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        
+        for (int num: nums1) {
+            if (!map.containsKey(num)) map.put(num, 0);
+            map.put(num, map.get(num) + 1);
+        }
+        
+        int[] temp = new int[nums2.length];
+        int i = 0;
+        
+        for (int num: nums2) {
+            if (map.containsKey(num) && map.get(num) > 0) {
+                temp[i++] = num;
+                map.put(num, map.get(num) - 1);
+            }
+        }
+        
+        int[] res = new int[i];
+        
+        for (int j = 0; j < i; j++) res[j] = temp[j];
+        
+        return res;
+        
     }
 }

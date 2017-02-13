@@ -57,53 +57,44 @@ public class _310_MinimumHeightTrees {
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         
         List<Integer> res = new ArrayList<Integer>();
-        
-        if (n == 1) {
-            res.add(0);
+        if (n <= 2) {
+            for (int i = 0; i < n; i++) res.add(i);
             return res;
         }
-        else if (n == 2) {
-            res.add(0);
-            res.add(1);
-            return res;
-        } 
         
-        List<List<Integer>> gra = new ArrayList<>();
-        
-        for (int idx = 0; idx < n; idx++) gra.add(new ArrayList<Integer>());
+        List<Integer>[] map = new List[n];
+        for (int i = 0; i < n; i++) map[i] = new ArrayList<Integer>();
         
         for (int[] edge: edges) {
-            gra.get(edge[0]).add(edge[1]);
-            gra.get(edge[1]).add(edge[0]);
+            map[edge[0]].add(edge[1]);
+            map[edge[1]].add(edge[0]);
         }
-
+        
         Queue<Integer> que = new LinkedList<Integer>();
         
-        for (int idx = 0; idx < n; idx++) {
-            if (gra.get(idx).size() == 1) que.offer(idx);
+        for (int i = 0; i < n; i++) {
+            if (map[i].size() == 1) que.offer(i);
         }
-
-        int size = que.size();
-        Set<Integer> set = new HashSet<Integer>();
         
-        while (!que.isEmpty()) {
-            int ver = que.poll();
+        int size = que.size();
+
+        int node = n;
+        while (true) {
+            Integer cur = que.poll();
+            node--;
             size--;
-            set.add(ver);
-            int other = gra.get(ver).get(0);
-            List<Integer> tos = gra.get(other);
-            tos.remove(new Integer(ver));
-            if (tos.size() == 1) que.offer(other);
-            
+            List<Integer> ls = map[cur];
+            for (Integer num: ls) {
+                map[num].remove(cur);
+                if (map[num].size() == 1) que.offer(num);
+            }
             if (size == 0) {
+                if (que.size() <= 2 && node <= 2) break;
                 size = que.size();
-                if (size == 2 && set.size() + 2 == n) break;
-                if (size == 1 && set.size() + 1 == n) break;
             }
         }
-
-        while (!que.isEmpty()) res.add(que.poll());
         
+        res.addAll(que);
         return res;
         
     }

@@ -24,16 +24,10 @@ public class _Move0and1 {
         }
         
         if (nums[right] != 1) right++;
-        int p = right;
-        for (int i = right; i < nums.length; i++) {
-            if(nums[i] != 1) swap(nums, p++, i);
-        }
+        move(nums, right, nums.length - 1, 1, 1);
         
         if (nums[left] != 0) left--;
-        p = left;
-        for (int i = left; i >= 0; i--) {
-            if (nums[i] != 0) swap(nums, p--, i);
-        }
+        move(nums, left, 0, 0, -1);
         
     }
     
@@ -41,6 +35,20 @@ public class _Move0and1 {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
+    }
+    
+    private void move(int[] nums, int sta, int end, int val, int step) {
+        
+        int idx = sta;
+        for (int i = sta; i != end + step; i += step) {
+            if (nums[i] != val) {
+                nums[idx] = nums[i];
+                idx += step;
+            }
+        }
+        
+        for (; idx != end + step; idx += step) nums[idx] = val;
+        
     }
 
     public static void main(String[] args) {

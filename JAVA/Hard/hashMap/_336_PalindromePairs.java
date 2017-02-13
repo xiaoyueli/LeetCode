@@ -1,4 +1,4 @@
-package hashTable;
+package hashMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,56 +37,40 @@ public class _336_PalindromePairs {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
         
         for (int i = 0; i < words.length; i++) {
-            map.put(reverse(words[i]), i);
+            map.put(new StringBuilder(words[i]).reverse().toString(), i);
         }
-        
+   
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
             int length = word.length();
             
-            if (map.containsKey("") && isPalindrome(word) && !word.equals("")) {
-                res.add(getList(map.get(""), i));
-                res.add(getList(i, map.get("")));
-            }
-            
-            if (map.containsKey(word) && i > map.get(word)) {
-                res.add(getList(map.get(word), i));
-                res.add(getList(i, map.get(word)));
-            }
-            
-            for (int len = 1; len < length; len++) {
-                String front = word.substring(0, len);
-                String back = word.substring(len, length);
-                if (isPalindrome(front) && map.containsKey(back)) res.add(getList(map.get(back), i));
-                if (isPalindrome(back) && map.containsKey(front)) res.add(getList(i, map.get(front)));
+            for (int j = 0; j <= length; j ++) {
+                String front = word.substring(0, j);
+                String back = word.substring(j, length);
+                if (isPalindrome(front) && map.containsKey(back) && i != map.get(back)) 
+                    addPair(res, map.get(back), i);
+                if (isPalindrome(back) && map.containsKey(front) && i != map.get(front) && !front.equals(word)) 
+                    addPair(res, i, map.get(front));
             }
         }
         
         return res;
     }
     
-    private List<Integer> getList(int i, int j) {
-        List<Integer> ls = new ArrayList<Integer>();
-        ls.add(i);
-        ls.add(j);
-        return ls;
+    private void addPair(List<List<Integer>> res, int i, int j) {
+
+        List<Integer> pair = new ArrayList<Integer>();
+        pair.add(i);
+        pair.add(j);
+        res.add(pair);
     }
     
-    private String reverse(String s) {
-        StringBuilder sb = new StringBuilder();
-        char[] seq = s.toCharArray();
-        for (char c: seq) sb.insert(0, c);
-        return sb.toString();
-    }
-    
-    private boolean isPalindrome(String s) {
-        
+    private boolean isPalindrome(String word) {
         int left = 0;
-        int right = s.length() - 1;
+        int right = word.length() - 1;
         while (left < right) {
-            if (s.charAt(left++) != s.charAt(right--)) return false;
+            if (word.charAt(left++) != word.charAt(right--)) return false;
         }
-        
         return true;
     }
 

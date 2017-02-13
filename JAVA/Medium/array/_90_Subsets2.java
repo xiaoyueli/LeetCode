@@ -7,58 +7,56 @@ import java.util.List;
 public class _90_Subsets2 {
     
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-           
-           List<List<Integer>> res = new ArrayList<>();
-           res.add(new ArrayList<Integer>());  // 加入空集
-           
-           Arrays.sort(nums);
-           
-           for (int idx = 0; idx < nums.length; idx++) {
-               List<List<Integer>> list = new ArrayList<>();
-
-
-               if (idx == 0 || nums[idx - 1] != nums[idx]) {
-                   // 新加入的元素不同于前一个元素时，
-                   // 同时加入原集合 和 原集合+新元素组成的新集合
-                   for (List<Integer> l: res) {
-                       list.add(l);
-                       List<Integer> newList = new ArrayList<Integer>(l);
-                       newList.add(nums[idx]);
-                       list.add(newList);
-                   }
-               }
-               else {
-                   // 新加入的元素与前一个元素相同
-                   for (List<Integer> l: res) {
-                       if (l.contains(nums[idx])) {
-                           // 如果原集合包含新的元素，在原集合中加入新元素
-                           // 新生成的含重复元素的集合会依次比之前的集合多一个重复元素
-                           
-                           // 如果原集合是第一个包含新原元素的集合，即只含有一个新元素
-                           // 同时加入原集合
-                           if (l.size() > 1 && l.get(l.size() - 2) != nums[idx]) list.add(l);
-                           List<Integer> newList = new ArrayList<Integer>(l);
-                           newList.add(nums[idx]);
-                           list.add(newList);           
-                       }
-                       else if (l.size() == 0){
-                           list.add(l);
-                           List<Integer> newList = new ArrayList<Integer>(l);
-                           newList.add(nums[idx]);
-                           list.add(newList);                          
-                       }
-                       else {
-                           // 含有新元素的集合都是通过不含新元素的集合生成的
-                           // 因此只添加原集合，不然会造成重复
-                           list.add(l);
-                       }
-                   }
-               }
-               
-               res = list;
-
-           }
-           return res;
-       }
+        
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<Integer>());
+        
+        int dup = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i != 0 && nums[i] == nums[i - 1]) dup++;
+            else dup = 0;
+            List<List<Integer>> tep = new ArrayList<>();
+            for (List<Integer> ls: res) {
+                tep.add(ls);
+                if (dup > 0 && (ls.size() < dup || ls.get(ls.size() - dup) != nums[i])) continue; 
+                // 如果是duplicate,则只在包含大于等于当前duplicate 长度的list中形成新的list
+                //例如，当前num 是第四个duplicate, 12222, 则只在已经含有3个2的 list后加入2形成新的list，否则就会构成重复
+                
+                List<Integer> copy = new ArrayList<Integer>(ls);
+                copy.add(nums[i]);
+                tep.add(copy);
+            }
+            res = tep;
+        }
+        
+        return res;
+    }
+    
+    
+    // bc
+    public List<List<Integer>> subsetsWithDup1(int[] nums) {
+        
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<Integer>());
+        List<Integer> ls = new ArrayList<Integer>();
+        helper(nums, res, ls, 0);
+        
+        return res;
+    }
+    
+    private void helper(int[] nums, List<List<Integer>> res, List<Integer> ls, int pos) {
+        if (pos == nums.length) return;
+        
+        for (int i = pos; i < nums.length; i++) {
+            ls.add(nums[i]);
+            List<Integer> copy = new ArrayList<Integer>(ls);
+            res.add(copy);
+            helper(nums, res, ls, i + 1);
+            ls.remove(ls.size() - 1);
+            while (i + 1 < nums.length && nums[i] == nums[i + 1]) i++;
+        }
+    }
        
    }

@@ -21,7 +21,33 @@ import java.util.List;
  */
 
 public class _46_Permutations {
-	
+    
+    
+    // iteratively
+    public List<List<Integer>> permute1(int[] nums) {
+        
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<Integer>());
+        
+        for (int num: nums) {
+            int size = res.size();
+            
+            for (int i = 0; i < size; i++) {
+                List<Integer> ls = res.remove(0);
+                for (int j = 0; j <= ls.size(); j++) {
+                    List<Integer> copy = new ArrayList<Integer>(ls);
+                    copy.add(j, num); // 在不同的位置插入当前数字
+                    res.add(copy);
+                }
+            }
+        }
+        
+        return res;
+        
+    }
+    
+    
+	// backtracking
     List<List<Integer>> res;
     public List<List<Integer>> permute(int[] nums) {
         

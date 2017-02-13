@@ -23,13 +23,11 @@ public class _66_PlusOne {
                 return digits;
             }
             else digits[i] = 0;
-        }
-        
-        if (digits[0] == 0) {
-            digits = new int[digits.length + 1];
-            digits[0] = 1;
-        }
-        
+        }      
+
+        digits = new int[digits.length + 1];
+        digits[0] = 1;
+     
         return digits;
     }
 

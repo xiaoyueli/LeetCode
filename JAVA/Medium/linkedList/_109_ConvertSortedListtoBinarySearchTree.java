@@ -26,33 +26,30 @@ class TreeNode {
 public class _109_ConvertSortedListtoBinarySearchTree {
     
     public TreeNode sortedListToBST(ListNode head) {
-        TreeNode root;
+        
         if (head == null) return null;
-        if (head.next == null) {
-            root = new TreeNode(head.val);
-            return root;
-        }
         
         ListNode slow = head;
         ListNode fast = head;
+        ListNode pre = null;
         
-        ListNode pre = head;
         while (fast != null && fast.next != null) {
             pre = slow;
             slow = slow.next;
             fast = fast.next.next;
         }
         
-        fast = slow;
-        slow = head;
-        pre.next = null;
-        root = new TreeNode(fast.val);
-        fast = fast.next;
-        root.left = sortedListToBST(slow);
-        root.right = sortedListToBST(fast);
+        TreeNode root = new TreeNode(slow.val);
+        if (pre != null) {
+            pre.next = null;
+            root.left = sortedListToBST(head);
+        }
         
+        root.right = sortedListToBST(slow.next);
+        slow.next = null;
         
         return root;
+        
     }
     
     

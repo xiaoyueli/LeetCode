@@ -35,46 +35,47 @@ public class _60_PermutationSequence {
     public String getPermutation(int n, int k) {
         
         StringBuilder sb = new StringBuilder();
-        boolean[] used = new boolean[n + 1];
+        boolean[] added = new boolean[n];
+        int total = getFactorial(n);
+        
         int level = n;
-        while (level > 1) {
+        while (level != 1) {
             
-            int countPer = level - 1;
-            int next = countPer - 1;
-            while (next != 0) {
-                // 当第N位是相同字母时，有N-1种排列
-                countPer *= next;
-                next--;
-            }
+            total = total / level; // n-1的全摆列
             
-            int rema = (k - 1) % countPer + 1;
-            int digit = (k - rema) / countPer + 1;  // k在第几层当中
+            int nth = (k - 1) / total + 1;  // 第n层是第几个chunk
+            k = (k - 1) % total + 1;    // 下一层需找的第几个数
             
-            for (int num = 1; num <= n; num++) {
-                // 第digit个字母则是该位所需的数字
-                
-                if (!used[num]) {
-                    digit--;
-                    if (digit == 0) {
-                        sb.append(num);
-                        used[num] = true;
-                        break;
-                    }
-                }
-            }
+            int num = getNthNotUsed(n, nth, added);  // 获得第nth尚未被使用的数
+            sb.append(num);
             
             level--;
-            k = rema; // 余数等于k在下一层的第几个
-            
         }
         
-        for (int num = 1; num <= n; num++) {
-            if (!used[num]) {
-                sb.append(num);
+        sb.append(getNthNotUsed(n, 1, added));
+        
+        return sb.toString();
+        
+    }
+    
+    private int getFactorial(int n) {
+        int res = 1;
+        while (n > 1) res *= n--;
+
+        return res;
+    }
+    
+    private int getNthNotUsed(int n, int nth, boolean[] added) {
+        
+        for (int i = 1; i <= n; i++) {
+            if (!added[i - 1]) nth--;
+            if (nth == 0) {
+                added[i - 1] = true;
+                return i;
             }
         }
         
-        return sb.toString();
+        return -1;
     }
     
     public static void main(String[] args) {

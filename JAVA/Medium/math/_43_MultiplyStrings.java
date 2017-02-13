@@ -15,42 +15,26 @@ public class _43_MultiplyStrings {
     
     public String multiply(String num1, String num2) {
         
-        char[] str1 = num1.toCharArray();
-        char[] str2 = num2.toCharArray();
+        int length = num1.length() + num2.length();
+        int[] res = new int[length];
         
-        char[] res = new  char[str1.length + str2.length + 1];
-        
-        for (int idx = 0; idx < res.length; idx++) res[idx] = '0';
-        
-        int add = 0;
-        int idx = res.length - 1;
-        int curidx = idx;
-        for (int idx1 = str1.length - 1; idx1 >= 0; idx1--) {   
-            
-            add = 0;
-            for (int idx2 = str2.length - 1; idx2 >=0; idx2--) {
-                int val1 = str1[idx1] - '0';
-                int val2 = str2[idx2] - '0';
-                int val = res[curidx] - '0';
-                int newval = (val1 * val2 + add + val) % 10;
-                add = (val1 * val2 + add + val) / 10;
-                res[curidx] = (char)(newval + '0');
-                curidx--;
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            int carry = 0;
+            int pos = length-- - 1;
+            for (int j = num2.length() - 1; j >= 0; j--) {
+                int val = (num1.charAt(i) - '0') * (num2.charAt(j) - '0') + carry + res[pos];
+                res[pos--] = val % 10;
+                carry = val / 10;
             }
-            res[curidx] = (char)(res[curidx] + add);
-            curidx = --idx;
+            res[pos] = carry;
         }
         
-        int sta = res.length - 1;
-        for (int i = 0; i < res.length; i++) {
-            if (res[i] != '0') {
-                sta = i;
-                break;
-            }
-        }
         
-        String s = new String(res);
-        return s.substring(sta);
+        StringBuilder sb = new StringBuilder();
+        for (int num: res) if (num != 0 || sb.length() != 0) sb.append(num);
+        
+        return sb.length() == 0 ? "0" : sb.toString();
+   
     }
     
 

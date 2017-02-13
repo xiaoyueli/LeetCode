@@ -1,5 +1,6 @@
 package breadthFirstSearch;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -27,7 +28,7 @@ import java.util.Set;
  * 
  * #
  * BFS, 将匹配的单词从候选单词中删除
- * 单词匹配方法：A-Z替换每一位，新单词在候选列表中存在就加入Q，并从原列表删除
+ * Dijkstra's algorithm
  *
  */
 
@@ -35,37 +36,40 @@ public class _127_WordLadder {
     
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
         
-    Queue<String> que = new LinkedList<String>();
-    
-    que.offer(beginWord);
-    int level = 1;
-    int size = 1;
-    while (!que.isEmpty()) {
+        HashSet<String> begin = new HashSet<String>();
+        begin.add(beginWord);
+        int level = 1;
         
-        String cur = que.poll();
-        size--;
-        int len = cur.length();
-        for (int change = 0; change < len; change++) {
-            for (char c = 'a'; c < 'z'; c++) {
-                char[] str = cur.toCharArray();
-                if (str[change] == c) continue;
-                str[change] = c;
-                String s = new String(str);
-                if (wordList.contains(s)) {
-                    if (s.equals(endWord)) return level + 1;
-                    que.offer(s);
-                    wordList.remove(s);
-                }
+        while (!wordList.isEmpty() && !begin.isEmpty()) {
 
+            HashSet<String> temp = new HashSet<String>(); 
+            for (String cur: begin) {
+                char[] seq = cur.toCharArray();
+                
+                for (char i = 'a'; i <= 'z'; i++) {
+                    for (int j = 0; j < cur.length(); j++) {
+                        if (seq[j] == i) continue;
+                        
+                        char old = seq[j];
+                        seq[j] = i;
+                        String word = new String(seq);
+                        seq[j] = old;
+                        
+                        if (word.equals(endWord)) return level + 1;
+                        if (wordList.contains(word)) {
+                            temp.add(word);
+                            wordList.remove(word);
+                        }
+                    }
+                }
+                
             }
-        }
-        if (size == 0) {
+            
             level++;
-            size = que.size();
+            begin = temp;
         }
-    }
-    
-    return 0;
+        
+        return 0;
     }
 
 }

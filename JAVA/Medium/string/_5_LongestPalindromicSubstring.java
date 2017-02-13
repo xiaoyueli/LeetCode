@@ -27,12 +27,48 @@ package string;
  * 
  * 当dp[i] + i > right 后，就要更新新的覆盖最远的center为i， 和right值
  * 
- * 
+ * 方法三：
+ * loop array，
+ * 以每一个点为终点，检查当前最长的回文长度 + 2 或 + 1是否是回文，即可，
+ * 因为找最长回文，因此比当前回文短的情况都可以不再考虑
  */
 
 public class _5_LongestPalindromicSubstring {
     
+    
     public String longestPalindrome(String s) {
+        
+        char[] seq = s.toCharArray();
+        int len = s.length();
+        if (len < 2) return s;
+        
+        int maxlen = 0;
+        int sta = 0;
+        
+        for (int i = 0; i < len; i++) {
+            if (isPalindrome(seq, i - maxlen - 1, i)) {
+                sta = i - maxlen - 1;
+                maxlen += 2;
+            }
+            else if (isPalindrome(seq, i - maxlen, i)) {
+                sta = i - maxlen;
+                maxlen += 1;
+            }
+        }
+        
+        return s.substring(sta, sta + maxlen);
+    }
+    
+    private boolean isPalindrome(char[] seq, int sta, int end) {
+        if (sta < 0) return false;
+        while (sta < end) {
+            if (seq[sta++] != seq[end--]) return false;
+        }
+        return true;
+    }
+    
+    //Manacher’s Algorithm 
+    public String longestPalindrome1(String s) {
                
         int len = s.length();
         char[] seq = new char[2 * len + 1];
@@ -77,7 +113,9 @@ public class _5_LongestPalindromicSubstring {
     
     }
     
-    public String longestPalindrome1(String s) {
+    
+    //dp
+    public String longestPalindrome2(String s) {
         
         
         char[] seq = s.toCharArray();

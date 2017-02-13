@@ -28,6 +28,12 @@ import java.util.Stack;
  * 
  */
 
+//class TreeNode {
+//    int val;
+//    TreeNode right;
+//    TreeNode left;
+//}
+
 public class _145_BinaryTreePostorderTraversal {
     
     public List<Integer> postorderTraversal(TreeNode root) {

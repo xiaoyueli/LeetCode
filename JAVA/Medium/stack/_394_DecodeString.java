@@ -20,12 +20,8 @@ package stack;
  * s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
  * 
  * 思路：
- * 遇到数字时，判断前面有没有遇到字母串，如有则进栈字母串。并记录数字
- * 遇到字母，判断字母的开头标记是不是为-1， 如是则记录字母开始的位置，否则什么也不做
- * 遇到"[" 则将累计的数字进栈，将数字累计符归0
- * 遇到"]"则判断栈顶是不是数字，如是。则pop出数字重复当前字母串，在push回去
- * 否则Pop栈顶元素知道栈顶是数字，并将pop出的字母串连接起来重新Push进栈
- * 注意最后以字母串结束时需单独处理
+ * 遇到‘[’ 就把之前的substr进栈 跟新start位置
+ * 遇到']'就出栈， 如果栈顶不含数字，就将这些substr连起来，直到遇到数字，再repeat之前连接起来的substr
  * 
  * 连接栈内元素，返回
  */
@@ -36,64 +32,58 @@ public class _394_DecodeString {
     
     public String decodeString(String s) {
 
-        StringBuilder sb = new StringBuilder();
+        //"2[abc]3[cd]ef"
+        
+        // abcabc cdcdcd
+
+        
         Stack<String> stack = new Stack<String>();
-        int staNum = -1;
-        int staChar = -1;
         
-        for(int i = 0; i < s.length(); i++) {
-            char cur = s.charAt(i);
-            if (isNum(cur) && staNum == -1) {
-                staNum = i;
-                if (staChar != -1) {
-                    stack.push(s.substring(staChar, i));
-                    staChar = -1;
+        int sta = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '[') {
+                stack.push(s.substring(sta, i));
+                sta = i + 1;
+            }
+            else if (s.charAt(i) == ']') {
+                if (sta != i) stack.push(s.substring(sta, i));
+                sta = i + 1;
+                StringBuilder sb = new StringBuilder();
+                while (!isNum(stack.peek().charAt(stack.peek().length() - 1))) {
+                    sb.insert(0, stack.pop());
                 }
-            }
-            else if (cur == '[') {
-                stack.push(s.substring(staNum, i));
-                staNum = -1;
-            }
-            else if (cur == ']') {
                 
-                if (staChar != -1) {
-                    stack.push(s.substring(staChar, i));
-                    staChar = -1;
+                String sub = stack.pop();
+                int j = 0;
+                for (; j < sub.length(); j++) {
+                    if (isNum(sub.charAt(j))) break;
                 }
-                concatenateString(stack);
+                
+                int num = Integer.parseInt(sub.substring(j));
+                
+                String str = getRepeat(sb.toString(), num);
+                if (j > 0) {
+                    str = sub.substring(0, j) + str;
+                }
+                stack.push(str);
             }
-            else if (!isNum(cur) && staChar == -1) staChar = i;
         }
         
-        if (staChar != -1) {
-            stack.push(s.substring(staChar, s.length()));
-            concatenateString(stack);
-        }
+        stack.push(s.substring(sta, s.length()));
+        StringBuilder sb = new StringBuilder();
         
         while (!stack.isEmpty()) sb.insert(0, stack.pop());
         
         return sb.toString();
-    }
-    
-    private void concatenateString(Stack<String> stack) {
 
-        
-        StringBuilder sb = new StringBuilder();
-        
-        while (!stack.isEmpty() && !isNum(stack.peek().charAt(0))) {
-            sb.insert(0, stack.pop());
-        }
-        
-        if (!stack.isEmpty()) {
-            String baseStr = sb.toString();
-            sb = new StringBuilder();
-            int loop = Integer.parseInt(stack.pop());
-            for (int i = 0; i < loop; i++) sb.append(baseStr);
-        }
-   
-        stack.push(sb.toString());
     }
     
+    private String getRepeat(String str, int num) {
+        StringBuilder sb = new StringBuilder();
+        while (num-- > 0) sb.append(str);
+        return sb.toString();
+    }
+
     private boolean isNum(char c) {
         return c >= '0' && c <= '9';
     }

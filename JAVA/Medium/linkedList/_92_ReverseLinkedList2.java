@@ -12,9 +12,6 @@ package linkedList;
  * Given m, n satisfy the following condition:
  * 1 ≤ m ≤ n ≤ length of list.
  * 
- * 指针指向m-1后从第M个node开始反转，
- * 需要反转的个数作为结束标签
- * 带两个指针变量，一个作为反转指针，一个作为连接后面node的指针
  *
  * Definition for singly-linked list.
  * public class ListNode {
@@ -27,32 +24,40 @@ public class _92_ReverseLinkedList2 {
     
     public ListNode reverseBetween(ListNode head, int m, int n) {
         
-        if (m == 1) {
-            head = reverse(head, head, n - m);
-            return head;
-        }
-        
         ListNode cur = head;
+        ListNode pre = null;
         int cnt = 1;
-        while (cnt < m - 1) {
+        while (cnt < m) {
+            pre = cur;
             cur = cur.next;
             cnt++;
         }
         
-        cur.next = reverse(cur.next, cur.next, n - m);
+        ListNode tempHead = cur;
+        
+        while (cnt < n) {
+            cur = cur.next;
+            cnt++;
+        }
+        
+        ListNode rear = cur.next;
+        cur.next = null;
+        
+        if (pre == null) head = reverse(tempHead);
+        else pre.next = reverse(tempHead);
+        
+        tempHead.next = rear;
         
         return head;
+        
     }
     
-    public ListNode reverse(ListNode node, ListNode rear, int cnt) {
-        if (cnt == 0) {
-            rear.next = node.next;
-            return node;
-        }
-        ListNode nextNode = node.next;
-        ListNode newHead = reverse(node.next, rear, cnt - 1);
-        nextNode.next = node;
-        
+    private ListNode reverse(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode sec = head.next;
+        ListNode newHead = reverse(sec);
+        sec.next = head;
+        head.next = null;
         return newHead;
     }
 }

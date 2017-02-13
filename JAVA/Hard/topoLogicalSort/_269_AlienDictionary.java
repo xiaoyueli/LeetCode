@@ -1,5 +1,7 @@
 package topoLogicalSort;
 
+import java.util.ArrayList;
+
 /**
  * There is a new alien language which uses the latin alphabet. 
  * However, the order among letters are unknown to you. 
@@ -32,6 +34,7 @@ package topoLogicalSort;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class _269_AlienDictionary {
@@ -127,6 +130,85 @@ public class _269_AlienDictionary {
         }
         
         return sb.toString();
+        
+    }
+    
+    
+    
+    //2刷，未验证，解锁跑一下
+    public String alienOrder1(String[] words) {
+        
+        HashMap<Character, List<Character>> map = new HashMap<Character, List<Character>>();
+        int[] degree = new int[26];
+        
+        String pre = words[0];
+        for (int i = 1; i < words.length; i++) {
+            String cur = words[i];
+            
+            int ip = 0, ic = 0;
+            while (ip < pre.length() && ic < cur.length() && pre.charAt(ip) == cur.charAt(ic)) {
+                degree[pre.charAt(ip) - 'a'] = 1;
+                degree[pre.charAt(ic) - 'a'] = 1;
+                ip++;
+                ic++;
+            }
+            
+            if (ip < pre.length() && ic < cur.length()) {
+                char cp = pre.charAt(ip);
+                char cc = cur.charAt(ic);
+                if (degree[cp - 'a'] == 0) degree[cp -'a'] = 1;
+                if (degree[cc - 'a'] == 0) degree[cc - 'a'] = 1;
+                if (!map.containsKey(cp)) {
+                    map.put(cp, new ArrayList<Character>());                    
+                }
+                if (!map.get(cp).contains(cc)) {
+                    map.get(cp).add(cc);
+                    degree[cc = 'a']++;
+                }
+            }
+            
+            while (ip < pre.length()) {
+                if (degree[pre.charAt(ip) - 'a'] == 0) degree[pre.charAt(ip) - 'a'] = 1;
+                ip++;
+            }
+            
+            while (ic < cur.length()) {
+                if (degree[cur.charAt(ic) - 'a'] == 0) degree[cur.charAt(ic) - 'a'] = 1;
+                ic++;
+            }
+            
+            pre = cur;
+   
+        }
+        
+        
+        return isValid(map, degree);
+  
+    }
+    
+    private String isValid(HashMap<Character, List<Character>> map, int[] degree) {
+        
+        Queue<Character> que = new LinkedList<Character>();
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < 26; i++) if (degree[i] == 1) que.offer((char)('a' + i));
+        
+        while (!que.isEmpty()) {
+            char cur = que.poll();
+            degree[cur - 'a']--;
+            sb.append(cur);
+            
+            List<Character> ls = map.get(cur);
+            if (ls == null) continue;
+            for (char next: ls) {
+                degree[next - 'a']--;
+                if (degree[next - 'a'] == 1) que.offer(next);
+            }
+        }
+        
+        for (int num: degree) if (num != 0) return "";
+        return sb.toString();
+        
         
     }
 

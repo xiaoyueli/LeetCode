@@ -30,75 +30,41 @@ import java.util.Queue;
 
 public class _130_SurroundedRegions {
     
-    int height;
-    int width;
     public void solve(char[][] board) {
         
-        height = board.length;
+        int height = board.length;
         if (height == 0) return;
-        width = board[0].length;
+        int width = board[0].length;
         
-        for (int col = 0; col < width; col++) {
-            if (board[0][col] == 'O') {
-                board[0][col] = '-';
-                bfs(board, 0, col);
-            }
-            if (board[height - 1][col] == 'O') {
-                board[height - 1][col] = '-';
-                bfs(board,height - 1, col);
-            }
+        for (int i = 0; i < height; i++) {
+            if (board[i][0] == 'O') dfs(board, i, 0);
+            if (board[i][width - 1] == 'O') dfs(board, i, width - 1);
         }
         
-        for (int row = 1; row < height - 1; row++) {
-            if (board[row][0] == 'O') {
-                board[row][0] = '-';
-                bfs(board, row, 0);
-            }
-            if (board[row][width - 1] == 'O') {
-                board[row][width - 1] = '-';
-                bfs(board, row, width - 1);
-            }
+        for (int i = 0; i < width; i++) {
+            if (board[0][i] == 'O') dfs(board, 0, i);
+            if (board[height - 1][i] == 'O') dfs(board, height - 1, i);
         }
         
-        
-        remarkBoard(board);
-   
-    }
-    
-    
-    public void bfs(char[][] board, int row, int col) {
-        
-        Queue<Integer> que = new LinkedList<Integer>();
-        int pos = row * width + col;
-        que.offer(pos);
-        
-        while (!que.isEmpty()) {
-            int cur = que.poll();
-            row = cur / width;
-            col = cur % width;
-            if (row - 1 >= 0 && board[row - 1][col] == 'O') enQue(board, que, row - 1, col);
-            if (row + 1 < height && board[row + 1][col] == 'O') enQue(board, que, row + 1, col);
-            if (col - 1 >= 0 && board[row][col - 1] == 'O') enQue(board, que, row, col - 1);
-            if (col + 1 < width && board[row][col + 1] == 'O') enQue(board, que, row, col + 1);
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                else if (board[i][j] == '#') board[i][j] = 'O';
+            }
         }
         
     }
     
-    public void enQue(char[][] board, Queue<Integer> que, int row, int col) {
-        board[row][col] = '-';
-        int pos = row * width + col;
-        que.offer(pos);
-    }
-    
-    public void remarkBoard(char[][] board) {
+    private void dfs(char[][] board, int row, int col) {
+        if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) return;
+        if (board[row][col] != 'O') return;
         
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                char cur = board[row][col];
-                if (cur == '-') board[row][col] = 'O';
-                else if (cur == 'O') board[row][col] = 'X';
-            }
-        }
+        board[row][col] = '#';
+        if (col + 1 != board[0].length - 1) dfs(board, row, col + 1); // board[0].length - 1 而不是board[0].length 只是为了减少递归的层数
+        dfs(board, row, col - 1);
+        dfs(board, row - 1, col);
+        if (row + 1 != board.length - 1) dfs(board, row + 1, col);
+        
     }
 
 }

@@ -22,6 +22,10 @@ import java.util.Queue;
 
 /* The read4 API is defined in the parent class Reader4.
 int read4(char[] buf); */
+class Reader4 {
+    
+
+}
 
 public class _158_ReadNCharactersGivenRead4_Callmultipletimes extends Reader4 {
 /**
@@ -49,11 +53,16 @@ public class _158_ReadNCharactersGivenRead4_Callmultipletimes extends Reader4 {
               buf[sum++] = cache[i];
           }
           
-          if (sum == n) for (; i < 4 && i < cnt; i++) que.offer(cache[i]);
+          if (sum == n) for (; i < cnt; i++) que.offer(cache[i]);
           if (cnt < 4) break;
           
       }
     
       return sum;  
+    }
+
+    private int read4(char[] cache) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

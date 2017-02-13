@@ -1,5 +1,7 @@
 package tree;
 
+import java.util.Stack;
+
 /**
  * Find the sum of all left leaves in a given binary tree.
  * 
@@ -31,6 +33,34 @@ public class _404_SumofLeftLeaves {
         sum = helper(td.left, sum, true);
         sum = helper(td.right, sum, false);
         
+        return sum;
+        
+    }
+    
+    
+    // iteratively
+    public int sumOfLeftLeaves1(TreeNode root) {
+        
+        int sum = 0;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        
+        while (root != null || !stack.isEmpty()) {
+            
+            TreeNode pre = root;
+            TreeNode leaf = root;
+            while (root != null) {
+                stack.push(root);
+                leaf = root;
+                root = root.left;
+            }
+            
+            
+            if (leaf != pre && leaf.right == null) sum += leaf.val;
+            
+            root = stack.pop();
+            root = root.right;
+           
+        }
         return sum;
         
     }

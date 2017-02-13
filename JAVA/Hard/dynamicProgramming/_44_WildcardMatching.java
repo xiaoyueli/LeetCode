@@ -63,5 +63,29 @@ public class _44_WildcardMatching {
         
         return ip == pat.length;
     }
+    
+    // dp
+    public boolean isMatch1(String s, String p) {
+        
+        int ls = s.length();
+        int lp = p.length();
+        boolean[][] dp = new boolean[ls + 1][lp + 1];
+        
+        dp[0][0] = true;
+        // 初始化，用pattern 匹配空字符串。 
+        // 如果p == '*', 则当前匹配状态 等于'*'前一个字符与空字符串匹配的结果
+        for (int i = 0; i < lp; i++) if (p.charAt(i) == '*') dp[0][i + 1] = dp[0][i]; 
+                                                                                               
+        for (int i = 0; i < ls; i++) {
+            for (int j = 0; j < lp; j++) {
+                if (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?') dp[i + 1][j + 1] = dp[i][j];
+                else if (p.charAt(j) == '*') dp[i + 1][j + 1] = (dp[i][j + 1] || dp[i + 1][j]);
+                // dp[i][j + 1] 代表'*'至少匹配上一个字符，则当前字符匹配状态等于'*'匹配s前一个字符的状态
+                // dp[i + 1][j] 代表'*'匹配到0个字符，则当前字符匹配状态等于'*'前一个字符与当前s字符的匹配结果
+            }
+        }
+        return dp[ls][lp];
+ 
+    }
 
 }

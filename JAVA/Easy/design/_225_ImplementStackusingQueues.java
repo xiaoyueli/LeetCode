@@ -60,31 +60,32 @@ public class _225_ImplementStackusingQueues {
     }
     
     
-    // 方法二，push的时候，将q2中的元素导入q1，
-    // 保持q1为空，q2中的元素颠倒进队顺序
+    // 方法二，用一个que，每次push的时候，将前面的数字poll出再重新加入que
+
+    // Push element x onto stack.
+//    Queue<Integer> que = new LinkedList<Integer>();
+//
 //    public void push(int x) {
-//        que1.offer(x);
-//        while (!que2.isEmpty()) {
-//            que1.offer(que2.poll());
+//        que.offer(x);
+//        
+//        for (int i = 0; i < que.size() - 1; i++) {
+//            que.offer(que.poll());
 //        }
-//        Queue<Integer> empQ = que1;
-//        que1 = que2;
-//        que2 = empQ;
 //    }
 //
 //    // Removes the element on top of the stack.
 //    public void pop() {
-//        que2.poll();
+//        que.poll();
 //    }
 //
 //    // Get the top element.
 //    public int top() {
-//        return que2.peek();
+//        return que.peek();
 //    }
 //
 //    // Return whether the stack is empty.
 //    public boolean empty() {
-//        return que2.isEmpty();
+//        return que.isEmpty();
 //    }
 
 }

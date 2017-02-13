@@ -63,58 +63,46 @@ public class _95_UniqueBinarySearchTrees2 {
         
     }
     
-        //第一遍写得记录
-//    public List<TreeNode> generateTrees(int n) {
-//        
-//        List<TreeNode> res = new ArrayList<TreeNode>();
-//        
-//        if (n == 0) return res;
-//        res.addAll(getTree(1, 2, n));
-//        for (int idx = 2; idx <= n; idx++) {
-//            res.addAll(getTree(idx, 1, n));
-//        }
-//        
-//        return res;
-//        
-//    }
-//    
-//    public List<TreeNode> getTree(int root, int floor, int ceiling) {
-//        
-//        
-//        List<TreeNode> ltree = new ArrayList<TreeNode>();
-//        List<TreeNode> rtree = new ArrayList<TreeNode>();
-//        List<TreeNode> trees = new ArrayList<TreeNode>();
-//        
-//        if (floor > ceiling) {
-//            trees.add(new TreeNode(root));
-//            return trees;
-//        }
-//        
-//        if (floor < root) ltree.addAll(getTree(floor, floor + 1, root - 1));
-//        for (int left = floor + 1; left < root; left++) {
-//            ltree.addAll(getTree(left, floor, root - 1));
-//        }
-//        
-//        if (root + 1 <= ceiling) rtree.addAll(getTree(root + 1, root + 2, ceiling));
-//        for (int right = root + 2; right <= ceiling; right ++) {
-//            rtree.addAll(getTree(right, root + 1, ceiling));
-//        }
-//        
-//        if (ltree.isEmpty()) ltree.add(null);
-//        if (rtree.isEmpty()) rtree.add(null);
-//        
-//        for (TreeNode lt: ltree) {
-//            for (TreeNode rt: rtree) {
-//                TreeNode node = new TreeNode(root);
-//                node.left = lt;
-//                node.right = rt;
-//                trees.add(node);
-//            }
-//        }
-//        
-//        return trees;
-//        
-//    }
+    
+    // dp
+    public List<TreeNode> generateTrees1(int n) {
+        
+        if (n == 0) return new ArrayList<TreeNode>();
+        
+        List<TreeNode>[] dp = new List[n + 1];
+        for (int i = 0; i <= n; i++) dp[i] = new ArrayList<TreeNode>();
+        dp[0].add(null);
+        
+        for (int num = 1; num <= n; num++) {
+            for (int root = 1; root <= num; root++) {
+                List<TreeNode> lsons = dp[root - 1];
+                List<TreeNode> rsons = dp[num - root];
+                
+                for (TreeNode ls: lsons) {
+                    for (TreeNode rs: rsons) {
+                        TreeNode rNode = new TreeNode(root);
+                        rNode.left = ls;
+                        rNode.right = clone(rs, root); // 右边的val都比左边的大root的值
+                        dp[num].add(rNode);
+                    }
+                }
+            }
+        }
+        
+        return dp[n];
+        
+    }
+    
+    private TreeNode clone(TreeNode node, int offset) {
+        
+        if (node == null) return null;
+        
+        TreeNode copy = new TreeNode(node.val + offset);
+        copy.left = clone(node.left, offset);
+        copy.right = clone(node.right, offset);
+        
+        return copy;
+    }
     
     public static void main(String[] args) {
         ArrayList<TreeNode> res = new ArrayList<TreeNode>();

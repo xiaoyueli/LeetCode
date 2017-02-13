@@ -1,4 +1,7 @@
 package tree;
+
+import java.util.Stack;
+
 /**
  * Given a binary tree, determine if it is a valid binary search tree (BST).
  * Assume a BST is defined as follows:
@@ -40,6 +43,28 @@ public class _98_ValidateBinarySearchTree {
     }
     
     
+    // 迭代
+    public boolean isValidBST1(TreeNode root) {
+        
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        
+        TreeNode pre = null;
+        
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            
+            root = stack.pop(); // 每次pop出的node 应为所剩node里最小的node
+            if (pre != null && pre.val >= root.val) return false; 
+            pre = root;
+            root = root.right;
+        }
+        
+        return true;
+        
+    }
     
     
 //   迭代     

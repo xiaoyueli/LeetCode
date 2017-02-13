@@ -1,5 +1,8 @@
 package tree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Given a binary tree, find its minimum depth.
  * 
@@ -14,13 +17,39 @@ public class _111_MinimumDepthofBinaryTree {
         if (root == null) return 0;
         if (root.left == null && root.right == null) return 1;
         
-        int lHeight = minDepth(root.left);
-        int rHeight = minDepth(root.right);
+        int left = Integer.MAX_VALUE;
+        int right = Integer.MAX_VALUE;
+        if (root.left != null) left = minDepth(root.left) + 1;
+        if (root.right != null) right = minDepth(root.right) + 1;
         
-        if (lHeight == 0) return rHeight + 1;
-        else if (rHeight == 0) return lHeight + 1;
-        else return Math.min(lHeight, rHeight) + 1;
+        return Math.min(left, right);
         
+    }
+    
+    // iteratively
+    public int minDepth1(TreeNode root) {
+        if (root == null) return 0;
+        if (root.left == null && root.right == null) return 1;
+        
+        Queue<TreeNode> que = new LinkedList<TreeNode>();
+        que.offer(root);
+        int size = 1;
+        int level = 1;
+        
+        while (!que.isEmpty()) {
+            TreeNode cur = que.poll();
+            size--;
+            if (cur.left == null && cur.right == null) return level;
+            if (cur.left != null) que.offer(cur.left);
+            if (cur.right != null) que.offer(cur.right);
+            if (size == 0) {
+                level++;
+                size = que.size();
+            }
+        }
+        
+        return level;
+  
     }
 
     public static void main(String[] args) {

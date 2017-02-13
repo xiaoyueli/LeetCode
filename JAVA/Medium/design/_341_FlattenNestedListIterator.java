@@ -49,45 +49,33 @@ interface NestedInteger {
 
 public class _341_FlattenNestedListIterator implements Iterator<Integer> {
 
-    Stack<NestedInteger> cache;
+    Stack<NestedInteger> stack;
     public _341_FlattenNestedListIterator(List<NestedInteger> nestedList) {
-        
-        cache = new Stack<NestedInteger>();
-        if (nestedList != null && !nestedList.isEmpty()) {
-            flattenList(cache, nestedList);
-        }
-        
-    }
-    
-    private void flattenList(Stack<NestedInteger> cache, List<NestedInteger> lst) {
-        if (lst.isEmpty()) return;
-        int len = lst.size();
-        for (int idx = len - 1; idx >= 0; idx--) {
-            cache.push(lst.get(idx));
+        stack = new Stack<NestedInteger>();
+        for (int i = nestedList.size() - 1; i >= 0; i--) {
+            stack.push(nestedList.get(i));
         }
     }
 
     @Override
     public Integer next() {
 
-        return cache.pop().getInteger();
+        return stack.pop().getInteger();
     }
 
     @Override
     public boolean hasNext() {
-    	
-        if (cache.isEmpty()) return false;
-        NestedInteger cur = cache.peek();
-        if (cur.isInteger()) return true;
-        while (!cur.isInteger()) {
-            cur = cache.pop();
-            List<NestedInteger> lst = cur.getList();
-            flattenList(cache, lst);
-            if (cache.isEmpty()) return false; 		// 排除empty list
-            cur = cache.peek();
+        
+        while (!stack.isEmpty() && !stack.peek().isInteger()) {
+            NestedInteger cur = stack.pop();
+            List<NestedInteger> ls = cur.getList();
+            for (int i = ls.size() - 1; i >= 0; i--) {
+                stack.push(ls.get(i));
+            }
         }
         
-        return true;
+        
+        return !stack.isEmpty();
     }
 }
 

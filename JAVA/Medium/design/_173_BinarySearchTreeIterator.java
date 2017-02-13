@@ -1,5 +1,7 @@
 package design;
 
+import java.util.Stack;
+
 /**
  * Implement an iterator over a binary search tree (BST). 
  * Your iterator will be initialized with the root node of a BST.
@@ -20,66 +22,29 @@ class TreeNode {
 
 public class _173_BinarySearchTreeIterator {
 
-    //method1: without stack
-    TreeNode root;
+    private Stack<TreeNode> stack;
+    private TreeNode root;
     public _173_BinarySearchTreeIterator(TreeNode root) {
+        stack = new Stack<TreeNode>();
         this.root = root;
     }
 
     /** @return whether we have a next smallest number */
-    public boolean hasNext() {    
-        return root != null;
+    public boolean hasNext() {
+        while (root != null) {
+            stack.push(root);
+            root = root.left;
+        }
+        return !stack.isEmpty();
     }
 
     /** @return the next smallest number */
     public int next() {
-        
-        TreeNode temp = root;
-        
-        if (temp.left == null) {
-            root = temp.right;
-            return temp.val;
-        }
-        TreeNode pre = temp;
-        while (temp != null) {
-            while (temp.left != null) {
-                pre = temp;
-                temp = temp.left;
-            }
-            
-            pre.left = temp.right;
-            return temp.val;
-        }
-        
-        return 0;
+        root = stack.pop();
+        int res = root.val;
+        root = root.right;
+        return res;
     }
-    
-    //method2: with stack
-//    Stack<TreeNode> sta = new Stack<TreeNode>();
-//    TreeNode root;
-//    public BSTIterator(TreeNode root) {
-//        this.root = root;
-//    }
-//
-//    /** @return whether we have a next smallest number */
-//    public boolean hasNext() {
-//        return root != null || !sta.isEmpty();
-//    }
-//
-//    /** @return the next smallest number */
-//    public int next() {
-//        
-//        while (root != null) {
-//            sta.push(root);
-//            root = root.left;
-//        }
-//        
-//        TreeNode cur = sta.pop();
-//        if (cur.right != null) root = cur.right;
-//        
-//        return cur.val;
-//   
-//    }
 }
 
 /**

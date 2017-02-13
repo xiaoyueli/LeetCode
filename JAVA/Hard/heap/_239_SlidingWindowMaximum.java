@@ -1,6 +1,8 @@
 package heap;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 
@@ -47,42 +49,48 @@ public class _239_SlidingWindowMaximum {
         
         if (nums == null || nums.length == 0) return nums;
         
-        LinkedList<Integer> ls = new LinkedList<Integer>();
+        List<Integer> ls = new ArrayList<Integer>();
         int[] res = new int[nums.length - k + 1];
         
-        int max = Integer.MIN_VALUE;
-        int idx = 0;
+        for (int i = 0; i < k; i++) ls = addNum(nums[i], ls);
         
-        for (int i = 0; i < nums.length; i++) {
-            if (ls.size() == k) {
-                ls.removeFirst();
-                if (ls.isEmpty()) max = Integer.MIN_VALUE;
-                else max = update(ls);
-            }
-            if (nums[i] > max) {
-                max = nums[i];
-                ls = new LinkedList<Integer>();
-                ls.add(max);
-            }
-            else ls.add(nums[i]);
-            if (i >= k - 1) res[idx++] = max;
+        int idx = 0;
+        res[idx++] = ls.get(0);
+        
+        for (int i = k; i < nums.length; i++) {
+            ls = addNum(nums[i], ls);
+            if (ls.size() > k) update(ls);
+            res[idx++] = ls.get(0);
+            
         }
         
         return res;
+
     }
     
-    private int update(LinkedList<Integer> ls) {
+    private List<Integer> addNum(int num, List<Integer> ls) {
+        
+        if (!ls.isEmpty() && num > ls.get(0)) ls = new ArrayList<Integer>();
+        ls.add(num);
+        
+        return ls;
+    }
+    
+    private void update(List<Integer> ls) {
+        
+        ls.remove(0);
         int max = ls.get(0);
+        
         int i = 1;
         while (i < ls.size()) {
             if (ls.get(i) > max) {
-                max = ls.get(i);
-                while (ls.get(0) != max) ls.removeFirst();
-                i = 0;
+                max = ls.get(i--);
+                while (i >= 0) ls.remove(i--);
+                i = 1;
             }
-            i++;
+            else i++;
         }
-        return max;
+
     }
     
     

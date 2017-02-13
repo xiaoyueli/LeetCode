@@ -18,39 +18,29 @@ package twoPointers;
 public class _125_ValidPalindrome {
     
     public boolean isPalindrome(String s) {
-        int len = s.length();
         
         int left = 0;
-        int right = len - 1;
-        while (left <= right) {
-            boolean lvalid = isValidChar(s.charAt(left));
-            boolean rvalid = isValidChar(s.charAt(right));
-            if (lvalid && rvalid) {
-                if (isSame(s.charAt(left), s.charAt(right))) {
-                    left++;
-                    right--;
-                }
-                else return false;
-            }
-            else if (!lvalid) left++;
-            else right--;
+        int right = s.length() - 1;
+        
+        while (left < right) {
+            while (left < right && !isValid(s.charAt(left))) left++;
+            while (left < right && !isValid(s.charAt(right))) right--;
+            
+            if (!isEqual(s.charAt(left++), s.charAt(right--))) return false;
         }
+        
         return true;
     }
     
-    public boolean isValidChar(char c) {
-        if (c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') return true;
-        return false;
+    private boolean isValid(char c) {
+        return c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
     }
     
-    public boolean isSame(char a, char b) {
-        
-        if (a == b) return true;
-        if (a > '9' && b > '9') {
-            if ('a' + a - 'A' == b) return true;
-            if ('A' + a - 'a' == b) return true;
-        }
-
+    private boolean isEqual(char c1, char c2) {
+        if (c1 == c2) return true;
+        if (c1 >= '0' && c1 <= '9' || c2 >= '0' && c2 <= '9') return false;
+        if (c1 - 'a' == c2 - 'A') return true;
+        if (c1 - 'A' == c2 - 'a') return true;
         return false;
     }
 }

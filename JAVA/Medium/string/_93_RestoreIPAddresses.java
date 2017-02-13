@@ -17,50 +17,31 @@ import java.util.List;
 
 public class _93_RestoreIPAddresses {
     
-    String info;
-    StringBuilder candi = new StringBuilder();
-    List<String> res = new ArrayList<String>();
-    int len;
     public List<String> restoreIpAddresses(String s) {
-        info = s;
-        len = info.length();
-        if (len < 4) return res;
-        else bc(0, 0);
+        
+        List<String> res = new ArrayList<String>();
+        
+        helper(res, s, 0, 0, "");
+        
         return res;
     }
     
-    
-    public void bc(int pos, int level) {
-        if (pos >= len) {
-            if (level == 4) {
-                int len = candi.length();
-                res.add(candi.toString().substring(0, len - 1));
+    private void helper(List<String> res, String s, int pos, int seq, String path) {
+        if (seq == 4 && pos == s.length()) {
+            res.add(path);
+            return;
+        }
+        if (pos == s.length() || seq == 4) return;
+        
+        for (int i = 1; i <= 3; i++) {
+            if (pos + i > s.length() || s.charAt(pos) == '0' && i > 1) break;
+            String val = s.substring(pos, pos + i);
+            if (Integer.parseInt(val) <= 255) {
+                if (pos == 0) helper(res, s, pos + i, seq + 1, val);
+                else helper(res, s, pos + i, seq + 1, path + '.' + val);
             }
-            return;
         }
-        if (level == 4) {
-            return;
-        }
-
-        for (int idx = 1; idx <= 3; idx++) {
-            String s;
-            
-            if (pos + idx > len) s = info.substring(pos, len);
-            else s = info.substring(pos, pos + idx);
-            if (idx > 1 && s.charAt(0) == '0') return; //丢掉第一个字符为0的组合
-            int val = Integer.parseInt(s);
-            if (val > 255) return;  //丢掉大于255的组合
-            
-            candi.append(s + ".");
-            bc(pos + idx, level + 1);
-
-            int templen = candi.length();
-            int sublen = s.length();
-            candi.delete(templen - sublen - 1, templen); // 删除本轮加入的字符串
-            if (templen >= len + 4) break; // 如果本轮加入的字符串总长已经超限，结束此轮循环
-
-
-        }
+        
     }
     
     public static void main(String[] args) {

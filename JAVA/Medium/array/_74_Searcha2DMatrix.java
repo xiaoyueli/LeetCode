@@ -20,32 +20,24 @@ public class _74_Searcha2DMatrix {
     
     public boolean searchMatrix(int[][] matrix, int target) {
         
-        int row = matrix.length;
-        for (int idx = 0; idx < matrix.length; idx++) {
-            if (target < matrix[idx][0]) {
-                row = idx - 1;
-                break;
-            }
-        }
-        if (row < 0) return false;
-        else if (row == matrix.length) {
-            if (target > matrix[row - 1][matrix[row - 1].length - 1]) return false;
-            row--;
-        }
+        int rows = matrix.length;
+        if (rows == 0) return false;
+        int cols = matrix[0].length;
         
-        return bs(matrix[row], target);
-        
-    }
-    
-    public boolean bs(int[] nums, int tar) {
         int left = 0;
-        int right = nums.length - 1;
+        int right = rows * cols - 1;
+        
         while (left <= right) {
-            int mid = (left + right) / 2;
-            if (nums[mid] == tar) return true;
-            if (nums[mid] < tar) left = mid + 1;
+            int mid = left + (right - left) / 2;
+            
+            int row = mid / cols;
+            int col = mid % cols;
+            int val = matrix[row][col];
+            if (val == target) return true;
+            if (val < target) left = mid + 1;
             else right = mid - 1;
         }
+        
         return false;
     }
 }

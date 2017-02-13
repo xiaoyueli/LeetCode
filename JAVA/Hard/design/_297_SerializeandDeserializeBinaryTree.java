@@ -30,6 +30,15 @@ import java.util.Queue;
  * 
  */
 
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    public TreeNode(int val) {
+        this.val = val;
+    }
+}
+
 public class _297_SerializeandDeserializeBinaryTree {
 
     // Encodes a tree to a single string.

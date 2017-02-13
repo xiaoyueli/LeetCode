@@ -36,30 +36,30 @@ class TreeLinkNode {
  }
 
 public class _117_PopulatingNextRightPointersinEachNode2 {
+    
     public void connect(TreeLinkNode root) {
         
-        TreeLinkNode head = new TreeLinkNode(0);
-        TreeLinkNode cur = head;
+        TreeLinkNode pre = new TreeLinkNode(0);
+        TreeLinkNode cur = pre;
         
         while (root != null) {
-            if (root.left != null) {
-                cur.next = root.left;
-                cur = cur.next;
+            TreeLinkNode pointer = root;
+            
+            while (pointer != null) {
+                if (pointer.left != null) {
+                    cur.next = pointer.left;
+                    cur = cur.next;
+                }
+                if (pointer.right != null) {
+                    cur.next = pointer.right;
+                    cur = cur.next;
+                }
+                pointer = pointer.next;
             }
             
-            if (root.right != null) {
-                cur.next = root.right;
-                cur = cur.next;
-            }
-            
-            root = root.next;
-            
-            if (root == null) {
-                root = head.next;
-                head.next = null;
-                cur = head;
-            }
-        }
- 
+            root = pre.next;
+            pre.next = null;
+            cur = pre;
+        } 
     }
 }

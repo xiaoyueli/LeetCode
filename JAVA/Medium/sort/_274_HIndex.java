@@ -23,41 +23,38 @@ import java.util.Arrays;
 
 public class _274_HIndex {
     
+    // On Space(n)
     public int hIndex(int[] citations) {
         
-        int len = citations.length;
-        int[] caculate = new int[len + 1];
+        int length = citations.length;
+        int[] count = new int[length + 1];
         
-        
-        for (int idx = 0; idx < len; idx++) {
-            // idx 表示著作数量
-            if (citations[idx] >= len) caculate[len]++; //计算引文值  大于等于最大著作数的数量
-            else caculate[citations[idx]]++;    // 计算 引文值等于著作数的数量
+        for (int num: citations) {
+            if (num > length) count[length]++;
+            else count[num]++;
         }
         
-        int sum = 0;
-        for (int idx = len; idx >= 0; idx--) {
-            if (caculate[idx] + sum >= idx) return idx;
-            sum += caculate[idx];
+        for (int i = length; i > 0; i--) {
+            if (count[i] >= i) return i;
+            else count[i - 1] += count[i];
         }
         
         return 0;
     }
     
+    
+    // nlogn
     public int hIndex2(int[] citations) {
         
         Arrays.sort(citations);
+        int length = citations.length;
         
-        int len = citations.length;
-        int maxH = 0;
-        
-        for (int idx = 0; idx < len; idx++) {
-            if (citations[idx] >= len - idx) {
-                int hidx = len - idx;
-                if (hidx > maxH) maxH = hidx;
-            }
+        int hidx = 0;
+
+        for (int i = 0; i < length; i++) {
+            if (length - i <= citations[i]) return length - i;
         }
         
-        return maxH;
+        return 0;
     }
 }

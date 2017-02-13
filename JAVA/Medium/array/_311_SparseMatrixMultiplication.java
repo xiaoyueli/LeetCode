@@ -33,23 +33,22 @@ public class _311_SparseMatrixMultiplication {
     
     public int[][] multiply(int[][] A, int[][] B) {
         
-        int rowA = A.length;
-        int colA = A[0].length;
-        int[][] res = new int[rowA][B[0].length];
+        int[][] res = new int[A.length][B[0].length];
         
-        for (int row = 0; row < rowA; row++) {
-            for (int col = 0; col < colA; col++) {
-                
-                if(A[row][col] == 0) continue;
-                
-                for (int idx = 0; idx < B[0].length; idx++) {
-                    res[row][idx] += A[row][col] * B[col][idx];
+        for (int row = 0; row < A.length; row++) {
+            for (int col = 0; col < A[0].length; col++) {
+                int val = A[row][col];
+                if (val != 0) {
+                    
+                    for (int bcol = 0; bcol < B[0].length; bcol++) {
+                        res[row][bcol] += val * B[col][bcol];
+                    }           
                 }
-                  
             }
         }
         
         return res;
+        
     }
 
 }

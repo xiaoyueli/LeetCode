@@ -13,7 +13,17 @@ import java.util.PriorityQueue;
  *
  */
 
+class ListNode{
+    int val;
+    ListNode next;
+    public ListNode(int val){
+        
+    }
+}
+
 public class _23_MergekSortedLists {
+    
+
     
     public ListNode mergeKLists(ListNode[] lists) {
         

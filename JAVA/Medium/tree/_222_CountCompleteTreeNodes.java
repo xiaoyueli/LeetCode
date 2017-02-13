@@ -18,77 +18,47 @@ package tree;
 
 public class _222_CountCompleteTreeNodes {
     
-    // 迭代
     public int countNodes(TreeNode root) {
         
         int sum = 0;
         int height = 0;
         
-        boolean flag = true;
         while (root != null) {
             
-            TreeNode temp = root;
-            if (flag) {
-                height = 0;
-                //计算数高
-                while (temp != null) {
-                    temp = temp.left;
-                    height++;
-                }
-            }
-
-            temp = root.left;
-            int subH = 0;
-            // 验证左子树是否是满二叉树
-            while (temp != null) {
-                temp = temp.right;
-                subH++;
-            }
-            
-            if (subH + 1 == height) {
-                // 若左子树是满二叉树，累计左子树的Node数
-                // 将root更新为右子树
-                sum += 1 << subH;
+            if (height == 0) height = getLeftHeight(root);
+            int subhr = getRightHeight(root.left);
+            if (height == subhr + 1) {
+                sum += 1 << subhr;
                 root = root.right;
-                flag = true;  // 需要重新计算新的数高
+                height = 0;   // 如果左子数是满二叉树，需重新计算树高
             }
             else {
-                // 否则右子树是满二叉树，累计右子树Node数
-                // 将root 更新为左子树
-                sum += 1 << (height - 2);
+                sum += 1 << subhr;
                 root = root.left;
-                height--; // 更新新的树高，不需要重新计算 
-                flag = false;
+                height--;
             }
         }
         
         return sum;
-
+        
     }
     
-    // 递归
-    public int countNodes2(TreeNode root) {
-        if (root == null) return 0;
-        
-        TreeNode temp = root;
-        int llevel = 0;
-        while (temp != null) {
-            temp = temp.left;
-            llevel++;
+    private int getLeftHeight(TreeNode root) {
+        int height = 0;    
+        while (root != null) {
+            root = root.left;
+            height++;
         }
-        
-        temp = root;
-        int rlevel = 0;
-        while (temp != null) {
-            temp = temp.right;
-            rlevel++;
+        return height;
+    }
+    
+    private int getRightHeight(TreeNode root) {
+        int height = 0;
+        while (root != null) {
+            root = root.right;
+            height++;
         }
-        
-        if (llevel == rlevel) return (1 << llevel) - 1;
-        
-        int res = countNodes(root.left) + countNodes(root.right) + 1;
-        
-        return res;
+        return height;
     }
 
     public static void main(String[] args) {

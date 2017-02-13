@@ -27,66 +27,25 @@ public class _161_OneEditDistance {
 
     public boolean isOneEditDistance(String s, String t) {
         
-        char[] shorter = s.toCharArray();
-        char[] longer = t.toCharArray();
+        if (s.length() < t.length()) return isOneEditDistance(t, s);
         
-        int slen = shorter.length;
-        int llen = longer.length;
-        if (llen < slen) {
-            char[] temp = longer;
-            longer = shorter;
-            shorter = temp;
-            
-            llen = longer.length;
-            slen = shorter.length;
-        }
+        if (s.length() == t.length()) return check(s, t, 1);
+        if (s.length() - t.length() > 1) return false;
         
-        if (llen - slen > 1) return false;
-        
-        int i = 0;
-        for (; i < slen; i++) {
-            if (shorter[i] == longer[i]) continue;
-            if (slen == llen) return checkEquals(shorter, i + 1, slen - 1, longer, i + 1, slen - 1);
-            else return checkEquals(shorter, i, slen - 1, longer, i + 1, llen - 1);
-        }
-        
-        return slen != llen;
-    
-    }
-
-    private boolean checkEquals(char[] seq1, int s1, int e1, char[] seq2, int s2, int e2) {
-        while (s1 <= e1 && s2 <= e2) {
-            if (seq1[s1++] != seq2[s2++]) return false;
+        for (int i = 0; i < t.length(); i++) {
+            if (s.charAt(i) != t.charAt(i)) return check(s.substring(i + 1), t.substring(i), 0);
         }
         
         return true;
     }
     
-    
-    // 解锁后跑一下
-    public boolean solve(String s, String t) {
-        
-        if (s.length() == t.length()) {
-            int cnt = 0;
-            for (int i = 0; i < s.length(); i++) {
-                if (s.charAt(i) != t.charAt(i)) cnt++;
-                if (cnt > 1) return false;
-            }
-            return cnt == 1;
-        }
-        
-        if (s.length() > t.length()) return solve(t, s);
-        
-        if (s.length() + 1 != t.length()) return false;
-        
+    private boolean check(String s, String t, int dif) {
+        int cnt = 0;
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != t.charAt(i)) {
-                return solve(s.substring(i, s.length()), t.substring(i + 1, t.length()));
-            }
+            if (s.charAt(i) != t.charAt(i)) cnt++;
+            if (cnt > dif) return false;
         }
-        
-        return true;
-        
+        return cnt == dif;
     }
     
 }

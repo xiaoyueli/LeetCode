@@ -51,6 +51,39 @@ public class _188_BestTimetoBuyandSellStock4 {
         
         return dp[k][len - 1];
     }
+    
+    
+    // 2刷
+    public int maxProfit2(int k, int[] prices) {
+        
+        int len = prices.length;
+        if (len < 2) return 0;
+        if (k >= len / 2) return quickSlove(prices);
+        int[][] dp = new int[k + 1][len];
+        
+        
+        int res = 0;
+
+        for (int i = 1; i <= k; i++) {
+            int max = -prices[0];
+            for (int day = 1; day < prices.length; day++) {
+                
+                dp[i][day] = Math.max(dp[i][day - 1], max + prices[day]);
+                max = Math.max(dp[i - 1][day - 1] - prices[day], max);
+            }
+            
+            
+        }
+        
+        return dp[k][len - 1];
+    }
+    
+    private int quickSlove(int[] prices) {
+        int sum = 0;
+        for (int i = 1; i < prices.length; i++) if (prices[i] > prices[i - 1]) sum += prices[i] - prices[i - 1];
+        return sum;
+        
+    }
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub

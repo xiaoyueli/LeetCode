@@ -1,5 +1,7 @@
 package string;
 
+import string.Reader4;
+
 /**
  * 
  * @author xiaoyue

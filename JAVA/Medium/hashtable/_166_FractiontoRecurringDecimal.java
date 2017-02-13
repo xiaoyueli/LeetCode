@@ -16,7 +16,6 @@ import java.util.HashMap;
  *  建一个hash表， 余数做KEY， 余数出现的位子做值， 注意细节处理
  *  建stringBuffer 循环加入每一次的商
  *  
- *  每一次余数不为零时，末尾补0， 成为新的被除数
  *
  */
 
@@ -24,40 +23,33 @@ public class _166_FractiontoRecurringDecimal {
     
     public String fractionToDecimal(int numerator, int denominator) {
         
+        StringBuilder sb = new StringBuilder();
+        if (numerator < 0 && denominator > 0 || numerator > 0 && denominator < 0) sb.append("-");
         long num = numerator;
         long den = denominator;
-        if (den == 0) return "";
         
-        boolean isPos = true;
-        if (num * den < 0) isPos = false;
-        if (num < 0) num = -num;
-        if (den < 0) den = -den;
+        num = Math.abs(num);
+        den = Math.abs(den);
         
         HashMap<Long, Integer> map = new HashMap<Long, Integer>();
-        StringBuffer sb = new StringBuffer();
-       
-        String fir = num / den + "";
-        num = num % den;
-        if (!isPos) fir = "-" + fir;
-        if (num == 0) return fir;
-        sb.append(fir + ".");
-        int idx = sb.length();
-        map.put(num, idx);
-        num *= 10;
         
-        do {
-            sb.append(num / den + "");
-            num = num % den;
+        sb.append((num / den) + "");
+        num %= den;
+        if (num != 0) sb.append(".");
+        
+        while (num != 0) {
             if (map.containsKey(num)) {
-                int i = map.get(num);
-                sb.insert(i, "(");
+                int idx = map.get(num);
+                sb.insert(idx, "(");
                 sb.append(")");
                 break;
             }
-            idx = sb.length();
-            map.put(num, idx);
+            
+            map.put(num, sb.length());
             num *= 10;
-        }while (num != 0); 
+            sb.append((num / den) + "");
+            num %= den;
+        }
         
         return sb.toString();
         

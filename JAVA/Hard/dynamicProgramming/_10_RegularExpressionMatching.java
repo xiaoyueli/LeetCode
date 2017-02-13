@@ -26,6 +26,11 @@ package dynamicProgramming;
  * 1.递归
  * 
  * 2.dp
+ * 当s and p字符相等的时候，或p==.时，当前位置的状态取决于s-1 and p-1
+ * 当pattern 字符等于* 时，可能的状态
+ * 当前*匹配了0个字符，则当前状态取决于 s, p - 2
+ * 当前字符匹配了至少1个字符，则需check s 和p-1 是否相等，如果相等，则当前状态取决于s-1 p, 即，s前一个字符匹配的情况
+ * 
  */
 
 public class _10_RegularExpressionMatching {
