@@ -18,24 +18,29 @@ public class Test {
 //
 //        Random rand = new Random();
 //        StringBuilder sb = new StringBuilder();
-
-        HashSet<Integer> set = new HashSet<Integer>();
-        LinkedList<Integer> ls = new LinkedList<Integer>();
-        
-        PriorityQueue<Integer> que = new PriorityQueue<Integer>();
-
-        HashMap<Integer, Integer>[] map = new HashMap[9];
-        
-        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
-        
-        boolean res = false || true;
-//        System.out.println("10".split("\\.")[0]);
-        
-        String str = "";
-        
+//
+//        HashSet<Integer> set = new HashSet<Integer>();
+//        LinkedList<Integer> ls = new LinkedList<Integer>();
+//        
+//        PriorityQueue<Integer> que = new PriorityQueue<Integer>();
+//
+//        HashMap<Integer, Integer>[] map = new HashMap[9];
+//        
+//        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
+//        
+//        boolean res = false || true;
+////        System.out.println("10".split("\\.")[0]);
+//        
+//        String str = "";
+//        
         List<String> lst = new ArrayList<String>();
-        lst.add("");
-        System.out.println(lst.size());
+//        lst.add("");
+//        System.out.println(lst.size());
+        
+
+            lst.toArray(new String[0]);
+            String str = "SGT";
+           
 
 
         
